@@ -3,39 +3,40 @@ import Board from "./Board"
 import BoardSetupAndInitialize from "./BoardSetupAndInitialize"
 import Case from "./Case"
 import Game from "./Game"
+import GameRules from "./GameRules"
 import Player from "./Player"
 import Rock from "./Rock"
-import { AnimalName, AreaSide, BoardSection, PlayerDataEntry } from "./types"
+import { AnimalName, Area, BoardSection, PlayerDataEntry, ReservedArea } from "./types"
 
 export function createGame(board: BoardSection, players: PlayerDataEntry[]) {
-    return new Game(createBoard(board), createPlayers(players))
+    const game = new Game(createBoard(board), new GameRules)
+    const playerBySide = new Map(createPlayers(players, game).map(p => [p.area, p]))
+    game.setPlayers(playerBySide)
+    
+    return game
 }
 
 export function createBoard(boardSection: BoardSection) {
-    const { playArea, topExternalArea, bottomExternalArea } = boardSection
-    if (!playArea || !topExternalArea || !bottomExternalArea) {
+    const { playArea, topReserveArea, bottomReserveArea } = boardSection
+    if (!playArea || !topReserveArea || !bottomReserveArea) {
         throw new Error("Une des zones du plateau de jeu est introuvable !");
     }
 
-    return new Board(
-        playArea, 
-        topExternalArea, 
-        bottomExternalArea, 
-        new BoardSetupAndInitialize
-    );
+    const boardSetup = new BoardSetupAndInitialize(playArea, topReserveArea, bottomReserveArea)
+    return new Board(boardSetup);
 }
 
-export function createPlayers(players: PlayerDataEntry[]) {
-    return players.map(player => new Player(player.name, player.area))
+export function createPlayers(players: PlayerDataEntry[], game: Game) {
+    return players.map(player => new Player(player.name, player.area, game))
 }
 
-export function createCase(id: string, index: number, area: ('internal' | 'external'), side?: AreaSide) {
-    return new Case(id, index, area, side)
+export function createCase(id: string, index: number, area: Area, reservedArea?: ReservedArea) {
+    return new Case(id, index, area, reservedArea)
 }
 
-export function createAnimal(defaultCase: Case) {
-    const name: AnimalName = defaultCase.side === 'top' ? 'Rhinocéros' : 'Eléphan'
-    return new Animal(name, defaultCase)
+export function createAnimal(defaultCase: Case, player: Player) {
+    const name: AnimalName = defaultCase.reservedArea === 'top' ? 'Rhinocéros' : 'Eléphan'
+    return new Animal(name, defaultCase, player)
 }
 
 export function createRock(id: number, defaultCase: Case) {

@@ -1,14 +1,26 @@
-import { AreaSide } from "./types";
+
+import Animal from "./Animal";
+import { Area, ReservedArea } from "./types";
 
 export default class Case {
     constructor(
         public id: string,
         public index: number,
-        private area: ('internal' | 'external'),
-        public side?: AreaSide
+        private area: Area,
+        public reservedArea?: ReservedArea
     ) {}
 
-    public isExternal() {
-        return this.area === 'external'
+    public isReserve() {
+        return this.area === 'reserve'
+    }
+
+    public onEnter(animal: Animal, event?: Event) {
+        console.log(event)
+        if (animal.currentCell.isReserve()) {
+            animal.enterOnBoard(this, 'bottom')
+        }
+
+        animal.player.getCurrentSession().setTurn(animal.player)
     }
 }
+

@@ -12,8 +12,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
 const board: BoardSection = {
   playArea: document.querySelector<HTMLDivElement>('#playArea'), 
-  topExternalArea: document.querySelector<HTMLDivElement>('#topExternalArea'), 
-  bottomExternalArea: document.querySelector<HTMLDivElement>('#bottomExternalArea')
+  topReserveArea: document.querySelector<HTMLDivElement>('#topExternalArea'), 
+  bottomReserveArea: document.querySelector<HTMLDivElement>('#bottomExternalArea')
 }
 
 const players: PlayerDataEntry[] = [
@@ -22,5 +22,4 @@ const players: PlayerDataEntry[] = [
 ]
 
 const game = createGame(board, players)
-game.init()
 game.start()

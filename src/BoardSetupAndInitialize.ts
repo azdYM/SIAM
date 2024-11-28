@@ -1,77 +1,59 @@
 import Animal from "./Animal"
-import Board from "./Board"
 import Case from "./Case"
 import { 
     createAnimal,
     createCase, 
     createRock, 
 } from "./factory"
-import { createAnimalElement, createCaseElement, createRockElement } from "./factoryHtml"
+import InitializerHTMLElement from "./InitializerHTMLElement"
+import Player from "./Player"
 import Rock from "./Rock"
-import { AreaSide } from "./types"
+import { PlayerCase } from "./types"
 
 export default class BoardSetupAndInitialize {
-    public setupMainBoard(mainBoard: HTMLElement) {
-        const totalCase = Board.CASE_ROW_NUMBER * Board.CASE_COLUMN_NUMBER
-        mainBoard.style.top = `${Board.TOP_SPACE}px`
-        mainBoard.style.left = `${Board.LEFT_SPACE}px`
-        const cases = []
+    private initializerHTML: InitializerHTMLElement
+
+    constructor(playedArea: HTMLDivElement, topReservedArea: HTMLDivElement, bottomReservedArea: HTMLDivElement) {
+        this.initializerHTML = new InitializerHTMLElement(
+            playedArea,
+            topReservedArea,
+            bottomReservedArea
+        )
+    }
     
-        for (let index = 0; index < totalCase; index++) {
-            const id = `play-area-${index}`
-            const child = createCaseElement(id, index)
-    
-            mainBoard.appendChild(child)
-            cases[index] = createCase(id, index, 'internal')
-        } 
-
-        return cases
+    public setupGridArea() {
+        const casesEntry =  this.initializerHTML.initHTMLCases('grid')
+        return casesEntry.map(entry => createCase(entry.id, entry.index, entry.area))        
     }
 
-    public setupExternalAreas(topExternalArea: HTMLDivElement, bottomExternalArea: HTMLDivElement) {
-        const topCases = this.setupExternalArea(topExternalArea, 'top')
-        const bottomCases = this.setupExternalArea(bottomExternalArea, 'bottom')
-
-        return [...topCases, ...bottomCases]
+    public setupReservedAreas() {
+        const casesEntry = this.initializerHTML.initHTMLCases('reserve')
+        return casesEntry.map(entry => createCase(entry.id, entry.index, entry.area, entry.reservedArea))   
     }
 
-    private setupExternalArea(element: HTMLDivElement, side: AreaSide) {
-        element.style[side] = '30px'
-        element.style.left = `${Board.LEFT_SPACE}px`
-        const cases = []
-
-        for (let index = 0; index < Board.CASE_COLUMN_NUMBER; index++) {
-            const id = `out-${side}-play-area-${index}`
-            const child = createCaseElement(id, index)
-
-            element.appendChild(child)
-            cases[index] = createCase(id, index, 'external', side)
-        } 
-
-        return cases
-    }
-
-    public initializeAnimals(cases: Case[]) {
+    public initializeAnimals(playersCases: PlayerCase[]) {
+        console.log(playersCases, 'jjdkd')
         const animals = new Set<Animal>([])
-
-        cases.forEach(caseView => {
-            const animal = this.createCaseContentForAnimal(caseView)
+        playersCases.forEach(playerCase => {
+            const animal = this.createAnimalContent(playerCase.cell, playerCase.player)
             animals.add(animal)
         })
 
         return Array.from(animals.values())
     }
 
-    private createCaseContentForAnimal(cell: Case) {
-        createAnimalElement(cell)
-        return createAnimal(cell)
+    private createAnimalContent(cell: Case, player: Player) {
+        const animal = createAnimal(cell, player)
+        const idAnimal = this.initializerHTML.createAnimalElement(cell, () => animal.onMove())
+        animal.setIdElement(idAnimal)
+        return animal
     }
 
     public initializeRocks(cases: Case[]) {
         const rocks = new Set<Rock>([])
 
         this.getThreeMiddleElements(cases).forEach((cell, key) => {
-            createRockElement(cell)
+            this.initializerHTML.createRockElement(cell)
             rocks.add(createRock(key, cell))
         })
 

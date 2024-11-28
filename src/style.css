@@ -49,7 +49,7 @@ h1 {
   position: relative;
   width: 350px;
   height: 500px;
-  background-image: url('../public/plateau.jpg');
+  background-image: url('../public/images/plateau.jpg');
   background-origin: border-box;
   background-repeat: no-repeat;
   background-size: contain;
@@ -63,14 +63,12 @@ h1 {
   position: absolute;
   width: 59px;
   height: 59px;
-  background-color: blue;
   box-sizing: border-box;
 }
 
 .externalArea {
   position: absolute;
   height: 60px;
-  background-color: greenyellow;
 }
 
 .externalArea > div {
@@ -81,13 +79,17 @@ h1 {
 }
 
 .caseContent {
-  width: 100%;
-  height: 100%;
   background: yellow;
   cursor: pointer;
+  position: absolute;
 }
 
 .caseContent img {
   width: 55px;
   height: 55px;
+}
+
+.restrictedCell {
+  background-color: #535bf2;
+  cursor: pointer;
 }
