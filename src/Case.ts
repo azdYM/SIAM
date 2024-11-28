@@ -14,13 +14,11 @@ export default class Case {
         return this.area === 'reserve'
     }
 
-    public onEnter(animal: Animal, event?: Event) {
-        console.log(event)
+    public onEnter(animal: Animal) {
         if (animal.currentCell.isReserve()) {
             animal.enterOnBoard(this, 'bottom')
         }
 
-        animal.player.getCurrentSession().setTurn(animal.player)
     }
 }
 

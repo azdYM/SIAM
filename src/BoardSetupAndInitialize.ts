@@ -6,12 +6,15 @@ import {
     createRock, 
 } from "./factory"
 import InitializerHTMLElement from "./InitializerHTMLElement"
+import InteractorHTMLElement from "./InteractorHTMLElement"
 import Player from "./Player"
 import Rock from "./Rock"
 import { PlayerCase } from "./types"
 
 export default class BoardSetupAndInitialize {
+
     private initializerHTML: InitializerHTMLElement
+    private interactorHTML: InteractorHTMLElement
 
     constructor(playedArea: HTMLDivElement, topReservedArea: HTMLDivElement, bottomReservedArea: HTMLDivElement) {
         this.initializerHTML = new InitializerHTMLElement(
@@ -19,6 +22,8 @@ export default class BoardSetupAndInitialize {
             topReservedArea,
             bottomReservedArea
         )
+
+        this.interactorHTML = new InteractorHTMLElement()
     }
     
     public setupGridArea() {
@@ -32,7 +37,6 @@ export default class BoardSetupAndInitialize {
     }
 
     public initializeAnimals(playersCases: PlayerCase[]) {
-        console.log(playersCases, 'jjdkd')
         const animals = new Set<Animal>([])
         playersCases.forEach(playerCase => {
             const animal = this.createAnimalContent(playerCase.cell, playerCase.player)
@@ -42,9 +46,17 @@ export default class BoardSetupAndInitialize {
         return Array.from(animals.values())
     }
 
+    public higlightCases(cases: Case[], animal: Animal) {
+        this.interactorHTML.highlightCasesAndSetEventForAnimal(cases, animal)
+    }
+
+    public clearHiglightCases() {
+        this.interactorHTML.clearHiglightCases()
+    }
+
     private createAnimalContent(cell: Case, player: Player) {
-        const animal = createAnimal(cell, player)
-        const idAnimal = this.initializerHTML.createAnimalElement(cell, () => animal.onMove())
+        const animal = createAnimal(cell, player, this.interactorHTML)
+        const idAnimal = this.initializerHTML.createAnimalElement(cell, () => player.onPlay(animal))
         animal.setIdElement(idAnimal)
         return animal
     }

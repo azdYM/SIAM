@@ -35,7 +35,7 @@ export default class Board {
     public getEntryPointsForArea(area: ReservedArea, moveNumber: number) {
         const restrictedCasesIndex = [0, 1, 3, 4, 5, 9, 10, 14, 15, 19, 20, 21, 23, 24]
         const unplayableCasesSecondTurn = [2, 22]
-        console.log(moveNumber, 'move number')
+        
         return this.getGridCases().filter(cell => {
             if (moveNumber > 2) {
                 return [...restrictedCasesIndex, ...unplayableCasesSecondTurn].includes(cell.index)
@@ -65,6 +65,16 @@ export default class Board {
     public getRocks() {
         return this.rocks
     }
+
+    public higlightCasesForAnimalSelected(cases: Case[], animal: Animal) {
+        this.boardSetup.higlightCases(cases, animal)
+    }
+
+    public clearLastHiglightCases() {
+        this.boardSetup.clearHiglightCases()
+    }
+
+
 
     private getPlayersCasesReserved(players: PlayerByArea) {  
         return this.getCases()

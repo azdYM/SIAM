@@ -4,6 +4,7 @@ import BoardSetupAndInitialize from "./BoardSetupAndInitialize"
 import Case from "./Case"
 import Game from "./Game"
 import GameRules from "./GameRules"
+import InteractorHTMLElement from "./InteractorHTMLElement"
 import Player from "./Player"
 import Rock from "./Rock"
 import { AnimalName, Area, BoardSection, PlayerDataEntry, ReservedArea } from "./types"
@@ -34,9 +35,9 @@ export function createCase(id: string, index: number, area: Area, reservedArea?:
     return new Case(id, index, area, reservedArea)
 }
 
-export function createAnimal(defaultCase: Case, player: Player) {
+export function createAnimal(defaultCase: Case, player: Player, interactorHTML: InteractorHTMLElement) {
     const name: AnimalName = defaultCase.reservedArea === 'top' ? 'Rhinocéros' : 'Eléphan'
-    return new Animal(name, defaultCase, player)
+    return new Animal(name, defaultCase, player, interactorHTML)
 }
 
 export function createRock(id: number, defaultCase: Case) {
