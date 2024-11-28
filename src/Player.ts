@@ -22,7 +22,18 @@ export default class Player {
     }
 
     public onPlay(animal: Animal) {
-        animal.onMove()
+        if (!this.isCurrentTurn) {
+            console.warn(`${this.name} ce n'est pas ton tour mec 😒`)
+            return
+        }
+
+        if (this.game.isSameAnimalSelected(animal)) {
+            return
+        }
+
+        this.game.updateSelectedAnimal(animal)
+        const availableCases = this.game.getAvailableCases(this.moveNumber)
+        this.game.board.higlightCasesForAnimalSelected(availableCases, animal)
     }
 
     public incrementMoveNumber() {

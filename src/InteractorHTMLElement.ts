@@ -6,7 +6,7 @@ export default class InteractorHTMLElement {
 
     private availableCases?: Map<string, () => void>
 
-    public highlightAndAddEventListener(cases: Case[], animal: Animal) {
+    public highlightCasesAndSetEventForAnimal(cases: Case[], animal: Animal) {
         this.handleOnAllRestrictedCell(
             (element: Element) => element.classList.remove('restrictedCell')
         )
@@ -25,13 +25,23 @@ export default class InteractorHTMLElement {
         })
     }
 
+    public clearHiglightCases() {
+        this.handleOnAllRestrictedCell((element, listener) => {
+            element.classList.remove('restrictedCell')
+            if (listener) {
+                element.removeEventListener('click', listener)
+            }
+        })
+    }
+
     public moveAnimalToCase(animal: Animal, cell: Case, position: AnimalPosition) {
         this.handleOnAllRestrictedCell((element, listener) => {
             element.classList.remove('restrictedCell')
-            if (listener)
+            if (listener) {
                 element.removeEventListener('click', listener)
+            }
         })
-
+        
         if (animal.id === null) {
             console.warn(`L'animal ${animal.name} dans la case ${cell.index} n'a pas d'identifiant`)
             return 
@@ -44,7 +54,7 @@ export default class InteractorHTMLElement {
         currentCellElement?.removeChild<HTMLElement>(animalElement)
         cellElement?.append(animalElement)
         
-        console.log(animalElement)
+        console.log(animalElement, "jdjjls")
     }
 
     private handleOnAllRestrictedCell(handle: (element: Element, listener?: () => void) => void) {
