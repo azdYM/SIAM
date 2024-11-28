@@ -13,3 +13,19 @@ Les règles complètes du jeu sont disponibles au format PDF dans [ce lien](http
 3. **Déroulement** : 
    - Chaque joueur peut effectuer une action par tour : déplacer, pousser, ou pivoter un animal.
    - Gagnez en poussant un rocher hors du plateau par votre côté.
+
+## Démarrer le jeu
+
+1. Assurez-vous d'avoir **Node.js** installé sur votre machine. Vous pouvez vérifier avec :
+   ```bash
+   node --version
+2. Cloner le dépôt
+   ```bash
+   git clone https://github.com/azdYM/siam.git
+   cd ton-depot-siam
+3. Installer les dépendances (juste vite et typescript)
+   ```bash
+   npm install
+4. Lancer le serveur
+   ```bash
+   npm run dev
