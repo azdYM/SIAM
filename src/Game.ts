@@ -24,12 +24,12 @@ export default class Game {
   }
 
   public move(animal: Animal, cell: Case, position: AnimalPosition) {
-    if (animal.currentCell.isReserve()) {
+    if (this.gameManager.canEnterAnimal(animal, cell)) {
       animal.enterOnBoard(cell, position)
       return this.next()
     }
 
-    if (this.gameManager.canMoveAnimal(animal)) {
+    if (this.gameManager.canMoveAnimal(animal, cell)) {
       animal.moveToEmptyCase(cell, position)
       return this.next()
     }

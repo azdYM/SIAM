@@ -52,7 +52,14 @@ export default class GameManager {
         return this.getAdjacentCases(animalCell, moveNumber)
     }
 
-    public canMoveAnimal(animal: Animal) {
+    public canEnterAnimal(animal: Animal, cell: Case) {
+        if (animal.currentCell.isReserve()) {
+            this.playArea.set(cell.index, animal.name === 'Eléphan' ? 'E' : 'R')
+            return true
+        }
+    }
+
+    public canMoveAnimal(animal: Animal, cell: Case) {
         return true
     }
 
