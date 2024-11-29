@@ -11,7 +11,7 @@ export default class GameManager {
     static CASE_ROW_NUMBER = 5
 
     private playableCasesAtStart = [0, 1, 3, 4, 5, 9, 10, 14, 15, 19, 20, 21, 23, 24]
-    private playableCasesAfterTwoTurns = [2, 22, ...this.playableCasesAtStart]
+    private morePlayableCasesAfterTwoTurns = [2, 22]
     private gridCases: Map<number, Case> = new Map()
     private reserveCases: Map<{index: number, area: ReservedArea}, Case> = new Map() 
     /**
@@ -68,14 +68,14 @@ export default class GameManager {
     }
 
     private getEntryPointsForArea(area: ReservedArea, moveNumber: number) {
-        const allowedCases = this.getStartAllowedCases(moveNumber, area)
+        const allowedCases = this.getEnterAllowedCases(moveNumber, area)
         return allowedCases.filter(cell => this.isAvailable(cell))
     }
 
-    private getStartAllowedCases(moveNumber: number, area?: ReservedArea) {
+    private getEnterAllowedCases(moveNumber: number, area?: ReservedArea) {
         return this.getGridCases().filter(cell => {
             if (moveNumber >= 2) {
-                return this.playableCasesAfterTwoTurns.includes(cell.index)
+                return [...this.morePlayableCasesAfterTwoTurns, ...this.playableCasesAtStart].includes(cell.index)
             }
 
             return this.playableCasesAtStart.includes(cell.index)
@@ -87,14 +87,34 @@ export default class GameManager {
         return allowedCases.filter(cell => this.isAvailable(cell))
     }
 
-    private getMoveAllowedCases(moveNumber: number, playableCase: Case) {
-        return this.getGridCases().filter(cell => {
-            if (moveNumber >= 2) {
-                return this.playableCasesAfterTwoTurns.includes(cell.index)
-            }
+    private getMoveAllowedCases(moveNumber: number, cell: Case) {
+        const orthogonalCasesIndex = [];
+        const rowColumns = GameManager.CASE_COLUMN_NUMBER
+        const totalCases = GameManager.CASE_COLUMN_NUMBER * GameManager.CASE_ROW_NUMBER
 
-            return this.playableCasesAtStart.includes(cell.index)
-        })
+        // Vérifie si l'index a une case "au-dessus"
+        if (cell.index - rowColumns >= 0) {
+            orthogonalCasesIndex.push(cell.index - rowColumns)
+        }
+
+        // Vérifie si l'index a une case "en dessous"
+        if (cell.index + rowColumns < totalCases) {
+            orthogonalCasesIndex.push(cell.index + rowColumns)
+        }
+
+        // Vérifie si l'index a une case "à gauche"
+        if (cell.index % rowColumns !== 0) {
+            orthogonalCasesIndex.push(cell.index - 1)
+        }
+
+        // Vérifie si l'index a une case "à droite"
+        if ((cell.index + 1) % rowColumns !== 0) {
+            orthogonalCasesIndex.push(cell.index + 1); // Case à droite
+        }
+
+        return orthogonalCasesIndex
+            .filter(caseIndex => moveNumber >= 2 ? true : !this.morePlayableCasesAfterTwoTurns.includes(caseIndex))
+            .map(caseIndex => this.gridCases.get(caseIndex)!)
     }
 
     

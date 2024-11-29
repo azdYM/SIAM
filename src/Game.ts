@@ -23,6 +23,19 @@ export default class Game {
     this.setTurn(this.players.get('bottom')!)
   }
 
+  private init() {
+    this.gameManager.initGame(this)
+    this.board!.setupSections(
+      this.gameManager.getGridCases(), 
+      this.gameManager.getReserveCases()
+    )
+  }
+
+  public setTurn(nextPlayer?: Player) {
+    this.currentPlayer?.setTurn(false)
+    this.currentPlayer = nextPlayer?.setTurn(true)
+  }
+
   public move(animal: Animal, cell: Case, position: AnimalPosition) {
     if (this.gameManager.canEnterAnimal(animal, cell)) {
       animal.enterOnBoard(cell, position)
@@ -63,11 +76,6 @@ export default class Game {
     return this.gameManager.getAvailableCasesForSelectedAnimal(this.selectedAnimal, moveNumber)
   }
 
-  public setTurn(nextPlayer?: Player) {
-    this.currentPlayer?.setTurn(false)
-    this.currentPlayer = nextPlayer?.setTurn(true)
-  }
-
   public setPlayers(playerBySide: PlayerByArea) {
     this.players = playerBySide
     return this
@@ -80,13 +88,5 @@ export default class Game {
   public setBoard(board: Board) {
     this.board = board
     return this
-  }
-
-  private init() {
-    this.gameManager.initGame(this)
-    this.board!.setupSections(
-      this.gameManager.getGridCases(), 
-      this.gameManager.getReserveCases()
-    )
   }
 }
