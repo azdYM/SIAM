@@ -27,11 +27,16 @@ export function createBoard(boardSection: BoardSection, game: Game): Board {
     }
 
     const board = new Board()
-    const initializerHTML = new InitializerHTMLElement(playArea, topReserveArea, bottomReserveArea)
-    const interactorHTML = new InteractorHTMLElement(board)
+    const HTMLInteractor = new InteractorHTMLElement(board)
+    const HTMLInitialzer = new InitializerHTMLElement(
+        playArea, 
+        topReserveArea, 
+        bottomReserveArea,
+        HTMLInteractor
+    )
 
     return board   
-        .setBordSetupper(new BoardSetupper(initializerHTML, interactorHTML))
+        .setBordSetupper(new BoardSetupper(HTMLInitialzer, HTMLInteractor))
         .setGame(game)
 }
 

@@ -8,7 +8,7 @@ import { AnimalName, AnimalPosition, ReservedArea } from "./types";
 export default class Animal {
     public reservedArea?: ReservedArea
     public position?: AnimalPosition
-    private interactorHTML?: InteractorHTMLElement
+    private HTMLInteractor?: InteractorHTMLElement
     
     constructor(
         public id: string,
@@ -24,8 +24,9 @@ export default class Animal {
         this.player.onPlay(this)
     }
 
-    public setInteractorHTML(interactorHTML: InteractorHTMLElement) {
-        this.interactorHTML = interactorHTML
+    public setHTMLInteractor(HTMLInteractor: InteractorHTMLElement) {
+        this.HTMLInteractor = HTMLInteractor
+        console.log(this.HTMLInteractor, 'interactor')
     }
 
     public getPosition() {
@@ -57,8 +58,12 @@ export default class Animal {
     }
 
     private handleMove(cell: Case, position: AnimalPosition) {
+        if (!this.HTMLInteractor) {
+            throw new Error("Le HTMLInteractor n'est activé veuillez l'avtivez en appellant setHTMLInteractor")
+        }
+
         this.player.incrementMoveNumber()
-        this.interactorHTML?.moveAnimalToCase(this, cell, position)
+        this.HTMLInteractor.moveAnimalToCase(this, cell, position)
         this.currentCell = cell
     }
 }

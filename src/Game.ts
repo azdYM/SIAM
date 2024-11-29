@@ -65,6 +65,7 @@ export default class Game {
 
   public setTurn(nextPlayer?: Player) {
     this.currentPlayer = nextPlayer?.setTurn(true)
+    console.log(this.currentPlayer)
   }
 
   public setPlayers(playerBySide: PlayerByArea) {

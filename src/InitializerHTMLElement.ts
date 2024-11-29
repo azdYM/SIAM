@@ -1,6 +1,8 @@
 import Animal from "./Animal"
 import Board from "./Board"
 import Case from "./Case"
+import GameManager from "./GameManager"
+import InteractorHTMLElement from "./InteractorHTMLElement"
 import Rock from "./Rock"
 import { Area, ReservedArea } from "./types"
 
@@ -9,7 +11,8 @@ export default class InitializerHTMLElement {
     constructor(
         private playedArea: HTMLElement, 
         private topReservedArea: HTMLDivElement, 
-        private bottomReservedArea: HTMLDivElement
+        private bottomReservedArea: HTMLDivElement,
+        private HTMLInteractor: InteractorHTMLElement
     ) {}
 
     public setupAreaElement(cases: Case[], area: Area) {
@@ -62,8 +65,8 @@ export default class InitializerHTMLElement {
 
     private createCaseElement(id: string, index: number) {
         const child = document.createElement('div')
-        const row = Math.trunc(index / Board.CASE_COLUMN_NUMBER)
-        const column = index % Board.CASE_COLUMN_NUMBER
+        const row = Math.trunc(index / GameManager.CASE_COLUMN_NUMBER)
+        const column = index % GameManager.CASE_COLUMN_NUMBER
     
         child.setAttribute('id', id)
         child.setAttribute('data-index', String(index))
@@ -73,7 +76,8 @@ export default class InitializerHTMLElement {
         return child
     }
 
-    private createAnimalElement(animal: Animal): Node {        
+    private createAnimalElement(animal: Animal): Node {
+        animal.setHTMLInteractor(this.HTMLInteractor)        
         const animalElement = document.createElement('button')
         const image = document.createElement('img')
     

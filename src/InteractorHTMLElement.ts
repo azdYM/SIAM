@@ -4,7 +4,6 @@ import Case from "./Case";
 import { AnimalPosition } from "./types";
 
 export default class InteractorHTMLElement {
-
     private availableCases?: Map<string, () => void>
     public constructor(private board: Board) {}
 
