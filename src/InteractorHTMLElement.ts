@@ -1,10 +1,12 @@
 import Animal from "./Animal";
+import Board from "./Board";
 import Case from "./Case";
 import { AnimalPosition } from "./types";
 
 export default class InteractorHTMLElement {
 
     private availableCases?: Map<string, () => void>
+    public constructor(private board: Board) {}
 
     public highlightCasesAndSetEventForAnimal(cases: Case[], animal: Animal) {
         this.handleOnAllRestrictedCell(
@@ -17,7 +19,8 @@ export default class InteractorHTMLElement {
 
         cases.forEach(cell => {
             const cellElement = document.getElementById(cell.id)!
-            const listener = () => cell.onEnter(animal)
+            const animalPosition = animal.getPosition()
+            const listener = () => this.board.handleEnter(animal, cell, animalPosition)
 
             cellElement.classList.add('restrictedCell')
             cellElement.addEventListener('click', listener, {once: true})
@@ -52,9 +55,7 @@ export default class InteractorHTMLElement {
         const cellElement = document.getElementById(cell.id)
 
         currentCellElement?.removeChild<HTMLElement>(animalElement)
-        cellElement?.append(animalElement)
-        
-        console.log(animalElement, "jdjjls")
+        cellElement?.append(animalElement)        
     }
 
     private handleOnAllRestrictedCell(handle: (element: Element, listener?: () => void) => void) {

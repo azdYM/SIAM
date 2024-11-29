@@ -1,8 +1,9 @@
 import Case from "./Case"
 import Animal from "./Animal"
 import Rock from "./Rock"
-import { ReservedArea, PlayerCase, PlayerByArea } from "./types"
-import BoardSetupAndInitialize from "./BoardSetupAndInitialize"
+import { PlayerCase, PlayerByArea, AnimalPosition } from "./types"
+import Game from "./Game"
+import BoardSetupper from "./BoardSetupper"
 
 export default class Board {
 
@@ -15,42 +16,28 @@ export default class Board {
     private cases?: Set<Case>
     private animals?: Animal[]
     private rocks?: Rock[]
+    private game?: Game
+    private boardSetupper?: BoardSetupper
 
-    constructor(
-        private boardSetup: BoardSetupAndInitialize
-    ) {}
-
-    public setup() {
-        const cases = this.boardSetup.setupGridArea()
-        const reserveCases = this.boardSetup.setupReservedAreas()
-        this.cases = new Set([...cases, ...reserveCases])
+    public setGame(game: Game): this {
+        this.game = game
+        return this
     }
 
-    public initalize(players: PlayerByArea) {
-        const playersCasesReserved: PlayerCase[] = this.getPlayersCasesReserved(players)
-        this.animals = this.boardSetup.initializeAnimals(playersCasesReserved)
-        this.rocks = this.boardSetup.initializeRocks(this.getCases().filter(c => !c.isReserve()))
+    public setBordSetupper(setupper: BoardSetupper): this {
+        this.boardSetupper = setupper
+        return this
     }
 
-    public getEntryPointsForArea(area: ReservedArea, moveNumber: number) {
-        const restrictedCasesIndex = [0, 1, 3, 4, 5, 9, 10, 14, 15, 19, 20, 21, 23, 24]
-        const unplayableCasesSecondTurn = [2, 22]
-        
-        return this.getGridCases().filter(cell => {
-            if (moveNumber > 2) {
-                return [...restrictedCasesIndex, ...unplayableCasesSecondTurn].includes(cell.index)
-            }
-
-            return restrictedCasesIndex.includes(cell.index)
-        })
+    public setupSections(gridCases: Case[], reserveCases: Case[]) {
+        if (!this.game) throw new Error('Appelez la methode setGame')
+        if (!this.boardSetupper) throw new Error('Appelez la methode setBoardSetupper')
+        this.boardSetupper.setupArea(gridCases, 'grid')
+        this.boardSetupper.setupArea(reserveCases, 'reserve')
     }
 
-    public getAdjacentCases(cell: Case, moveNumber: number): Case[] {
-        return []
-    }
-
-    public getGridCases() {
-        return this.getCases().filter(cell => !cell.isReserve())
+    public handleEnter(animal: Animal, cell: Case, position: AnimalPosition) {
+        this.game!.move(animal, cell, position)
     }
 
     public getCases() {
@@ -67,14 +54,12 @@ export default class Board {
     }
 
     public higlightCasesForAnimalSelected(cases: Case[], animal: Animal) {
-        this.boardSetup.higlightCases(cases, animal)
+        this.boardSetupper?.higlightCases(cases, animal)
     }
 
     public clearLastHiglightCases() {
-        this.boardSetup.clearHiglightCases()
+        this.boardSetupper?.clearHiglightCases()
     }
-
-
 
     private getPlayersCasesReserved(players: PlayerByArea) {  
         return this.getCases()

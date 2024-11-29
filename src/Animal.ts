@@ -6,34 +6,42 @@ import Rock from "./Rock";
 import { AnimalName, AnimalPosition, ReservedArea } from "./types";
 
 export default class Animal {
-    public id: string|null = null
+    public reservedArea?: ReservedArea
     public position?: AnimalPosition
-    private reservedArea?: ReservedArea
+    private interactorHTML?: InteractorHTMLElement
     
     constructor(
+        public id: string,
         public name: AnimalName,
         public currentCell: Case,
         public player: Player,
-        private interactorHTML: InteractorHTMLElement
     ) {
         this.position = currentCell.reservedArea === 'bottom' ? 'top' : 'bottom'
         this.reservedArea = currentCell.reservedArea
     }
 
-    public setIdElement(id: string) {
-        this.id = id
+    public onMove() {
+        this.player.onPlay(this)
+    }
+
+    public setInteractorHTML(interactorHTML: InteractorHTMLElement) {
+        this.interactorHTML = interactorHTML
+    }
+
+    public getPosition() {
+        if (!this.position) {
+            this.position = this.reservedArea === 'bottom' ? 'top' : 'bottom'
+        }
+
+        return this.position
     }
 
     public enterOnBoard(cell: Case, position: AnimalPosition) {
-        this.player.incrementMoveNumber()
-        this.player.getCurrentSession().setTurn(this.player)
-        this.interactorHTML.moveAnimalToCase(this, cell, position),
-
-        console.log(this.player.getMoveNumber())
+        this.handleMove(cell, position)
     }
 
     public moveToEmptyCase(cell: Case, position: AnimalPosition) {
-
+        this.handleMove(cell, position)
     }
 
     public rotateAnimal(position: AnimalPosition) {
@@ -46,6 +54,12 @@ export default class Animal {
 
     public moveWithPush(pushed: Animal|Rock) {
 
+    }
+
+    private handleMove(cell: Case, position: AnimalPosition) {
+        this.player.incrementMoveNumber()
+        this.interactorHTML?.moveAnimalToCase(this, cell, position)
+        this.currentCell = cell
     }
 }
 

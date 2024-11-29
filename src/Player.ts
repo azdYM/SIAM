@@ -4,7 +4,7 @@ import { ReservedArea } from "./types"
 
 export default class Player {
 
-    public isCurrentTurn: boolean = false
+    public isMyTurn: boolean = false
     private moveNumber: number = 0
 
     constructor(
@@ -14,7 +14,8 @@ export default class Player {
     ) {}
 
     public setTurn(isPlayerTurn: boolean) {
-        this.isCurrentTurn = isPlayerTurn
+        this.isMyTurn = isPlayerTurn
+        return this
     }
 
     public getCurrentSession() {
@@ -22,7 +23,7 @@ export default class Player {
     }
 
     public onPlay(animal: Animal) {
-        if (!this.isCurrentTurn) {
+        if (!this.isMyTurn) {
             console.warn(`${this.name} ce n'est pas ton tour mec 😒`)
             return
         }
@@ -33,7 +34,7 @@ export default class Player {
 
         this.game.updateSelectedAnimal(animal)
         const availableCases = this.game.getAvailableCases(this.moveNumber)
-        this.game.board.higlightCasesForAnimalSelected(availableCases, animal)
+        this.game.board!.higlightCasesForAnimalSelected(availableCases, animal)
     }
 
     public incrementMoveNumber() {

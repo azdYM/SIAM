@@ -1,6 +1,8 @@
+import Animal from "./Animal"
 import Case from "./Case"
 
 import Player from "./Player"
+import Rock from "./Rock"
 
 export type Area = ('reserve' | 'grid')
 
@@ -28,9 +30,4 @@ export type PlayerCase = {
     player: Player
 }
 
-export type HTMLCases = {
-    id: string,
-    index: number,
-    area: Area,
-    reservedArea?: ReservedArea
-}
+export type CaseContent = (null | Rock | Animal)

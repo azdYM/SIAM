@@ -1,8 +1,9 @@
-
-import Animal from "./Animal";
-import { Area, ReservedArea } from "./types";
+import { Area, CaseContent, ReservedArea } from "./types";
 
 export default class Case {
+
+    private currentContent: CaseContent = null
+
     constructor(
         public id: string,
         public index: number,
@@ -14,11 +15,12 @@ export default class Case {
         return this.area === 'reserve'
     }
 
-    public onEnter(animal: Animal) {
-        if (animal.currentCell.isReserve()) {
-            animal.enterOnBoard(this, 'bottom')
-        }
+    public getContent(): CaseContent {
+        return this.currentContent
+    }
 
+    public updateCurrentContent(content: CaseContent) {
+        this.currentContent = content
     }
 }
 
