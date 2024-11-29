@@ -26,7 +26,6 @@ export default class Animal {
 
     public setHTMLInteractor(HTMLInteractor: InteractorHTMLElement) {
         this.HTMLInteractor = HTMLInteractor
-        console.log(this.HTMLInteractor, 'interactor')
     }
 
     public getPosition() {

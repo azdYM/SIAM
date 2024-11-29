@@ -3,7 +3,7 @@ import Board from "./Board"
 import BoardSetupper from "./BoardSetupper"
 import Case from "./Case"
 import Game from "./Game"
-import GameRules from "./GameManager"
+import GameManager from "./GameManager"
 import InitializerHTMLElement from "./InitializerHTMLElement"
 import InteractorHTMLElement from "./InteractorHTMLElement"
 import Player from "./Player"
@@ -11,12 +11,12 @@ import Rock from "./Rock"
 import { AnimalName, Area, BoardSection, PlayerDataEntry, ReservedArea } from "./types"
 
 export function createGame(boardElements: BoardSection, players: PlayerDataEntry[]): Game {
-    const game = new Game(new GameRules())
-    const playerBySide = new Map(createPlayers(players, game).map(p => [p.area, p]))
+    const game = new Game(new GameManager())
+    const playerByArea = new Map(createPlayers(players, game).map(p => [p.area, p]))
     const board = createBoard(boardElements, game)
 
     return game
-        .setPlayers(playerBySide)
+        .setPlayers(playerByArea)
         .setBoard(board)
 }
 

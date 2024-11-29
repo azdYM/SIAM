@@ -3,7 +3,6 @@ import Game from "./Game"
 import { ReservedArea } from "./types"
 
 export default class Player {
-
     public isMyTurn: boolean = false
     private moveNumber: number = 0
 
