@@ -2,7 +2,7 @@ import Animal from "./Animal";
 import Case from "./Case";
 import { createAnimal, createCase, createRock } from "./factory";
 import Game from "./Game";
-import { AnimalName, Area, ReservedArea } from "./types";
+import { AnimalName, Area, CaseContent, ReservedArea } from "./types";
 import { getThreeMiddleElements } from "./utils";
 
 
@@ -22,7 +22,7 @@ export default class GameManager {
      * T => Target (Rock)
      * null => Vide
      */
-    private playArea: Map<number, ('E' | 'R' | 'T' | null)> = new Map()
+    private playArea: Map<number, ('E' | 'R' | 'RO' | null)> = new Map()
     private game?: Game
 
     public initGame(game: Game) {
@@ -54,17 +54,25 @@ export default class GameManager {
 
     public canEnterAnimal(animal: Animal, cell: Case) {
         if (animal.currentCell.isReserve()) {
-            this.playArea.set(cell.index, animal.name === 'Eléphan' ? 'E' : 'R')
+            this.updatePlayArea(cell.index, animal)
             return true
         }
     }
 
     public canMoveAnimal(animal: Animal, cell: Case) {
+        this.updatePlayArea(cell.index, animal)
         return true
     }
 
     public canMoveAnimalAndPushContent() {
         return false
+    }
+
+    private updatePlayArea(newCaseIndex: number, caseContent: CaseContent) {
+        let lastCaseIndex = caseContent!.getCurrentCell().index
+        
+        this.playArea.set(lastCaseIndex, null)
+        this.playArea.set(newCaseIndex, caseContent!.getInitialName())
     }
 
     private getEntryPointsForArea(area: ReservedArea, moveNumber: number) {
@@ -142,7 +150,7 @@ export default class GameManager {
     private addRocksInCases(cases: Case[]) {
         cases.forEach((cell, index) => {
             cell.updateCurrentContent(createRock(`rock-${index+1}`, cell))
-            this.playArea.set(cell.index, 'T')
+            this.playArea.set(cell.index, 'RO')
         })
     }
 

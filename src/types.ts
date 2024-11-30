@@ -1,5 +1,6 @@
 import Animal from "./Animal"
 import Case from "./Case"
+import ICaseContent from "./ICaseContent"
 
 import Player from "./Player"
 import Rock from "./Rock"
@@ -30,4 +31,4 @@ export type PlayerCase = {
     player: Player
 }
 
-export type CaseContent = (null | Rock | Animal)
+export type CaseContent = ICaseContent | null

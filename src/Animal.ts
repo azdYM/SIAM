@@ -1,11 +1,11 @@
 
 import Case from "./Case";
+import ICaseContent from "./ICaseContent";
 import InteractorHTMLElement from "./InteractorHTMLElement";
 import Player from "./Player";
-import Rock from "./Rock";
 import { AnimalName, AnimalPosition, ReservedArea } from "./types";
 
-export default class Animal {
+export default class Animal implements ICaseContent {
     public reservedArea?: ReservedArea
     public position?: AnimalPosition
     private HTMLInteractor?: InteractorHTMLElement
@@ -18,6 +18,15 @@ export default class Animal {
     ) {
         this.position = currentCell.reservedArea === 'bottom' ? 'top' : 'bottom'
         this.reservedArea = currentCell.reservedArea
+    }
+
+    public getCurrentCell(): Case {
+        return this.currentCell
+    }
+
+    public getInitialName(): ("RO" | "E" | "R") {
+        if (this.name === 'Eléphan') return "E"
+        return "R"
     }
 
     public onMove() {
@@ -52,7 +61,7 @@ export default class Animal {
 
     }
 
-    public moveWithPush(pushed: Animal|Rock) {
+    public moveWithPush(pushed: ICaseContent) {
 
     }
 
