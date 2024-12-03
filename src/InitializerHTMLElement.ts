@@ -28,7 +28,8 @@ export default class InitializerHTMLElement {
         this.playedArea.style.left = `${Board.LEFT_SPACE}px`
 
         cases.forEach(cell => {
-            const caseElement = this.createCaseElement(cell.id, cell.index)
+            const caseElement = this.createCaseElement(cell)
+            caseElement.innerHTML = this.createModalForSelectPosition(cell)
             if (cell.getContent() instanceof Rock) {
                 const rockElement = this.createRockElement(cell.getContent() as Rock)
                 caseElement.appendChild(rockElement)
@@ -56,24 +57,42 @@ export default class InitializerHTMLElement {
         element.style.left = `${Board.LEFT_SPACE}px`
 
         cases.forEach(cell => {
-            const caseElement = this.createCaseElement(cell.id, cell.index)
+            const caseElement = this.createCaseElement(cell)
             const animalElement = this.createAnimalElement(cell.getContent() as Animal)
             caseElement.appendChild(animalElement)
             element.appendChild(caseElement)
         })
     }
 
-    private createCaseElement(id: string, index: number) {
+    private createCaseElement(cell: Case) {
+        cell.setHTMLInteractor(this.HTMLInteractor)
         const child = document.createElement('div')
-        const row = Math.trunc(index / GameManager.CASE_COLUMN_NUMBER)
-        const column = index % GameManager.CASE_COLUMN_NUMBER
+        const row = Math.trunc(cell.index / GameManager.CASE_COLUMN_NUMBER)
+        const column = cell.index % GameManager.CASE_COLUMN_NUMBER
     
-        child.setAttribute('id', id)
-        child.setAttribute('data-index', String(index))
+        child.setAttribute('id', cell.id)
+        child.setAttribute('data-index', String(cell.index))
         child.style.left = `${column * Board.CASE_SIZE}px`
         child.style.top = `${row * Board.CASE_SIZE}px`
-    
         return child
+    }
+
+    private createModalForSelectPosition(cell: Case): string {
+        const x: ('left' | 'right') = cell.index % 5 >= 2 ? 'left' : 'right'
+        const y: ('top' | 'bottom') = cell.index < 15 ? "top" : "bottom"
+        
+        return `
+            <div style="${x}: -103px; ${y}: 0" class="selectPosition">
+                <div class="positionContent">
+                    <p>Position de l'animal</p>
+                    <span class="">Haut</span>
+                    <span class="">Droit</span>
+                    <span class="">Bas</span>
+                    <span class="">Gauche</span>
+                </div>
+                <button class="close">fermer</button>
+            </div>
+        `
     }
 
     private createAnimalElement(animal: Animal): Node {

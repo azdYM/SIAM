@@ -29,6 +29,11 @@ export default class Board {
         this.boardSetupper.setupArea(reserveCases, 'reserve')
     }
 
+    public handleSetPosition(animal: Animal, cell: Case, e?: Event) {
+        e?.preventDefault()
+        cell.openAnimalPositionModal()
+    }
+
     public handleEnter(animal: Animal, cell: Case, position: AnimalPosition) {
         this.game!.move(animal, cell, position)
     }

@@ -1,14 +1,16 @@
 import Animal from "./Animal";
 import Board from "./Board";
 import Case from "./Case";
-import { AnimalPosition } from "./types";
+import { ActionsForAvailableCase, AnimalPosition } from "./types";
 
 export default class InteractorHTMLElement {
-    private availableCases?: Map<string, () => void>
+
+    private availableCases?: Map<string, ActionsForAvailableCase[]>
+
     public constructor(private board: Board) {}
 
     public highlightCasesAndSetEventForAnimal(cases: Case[], animal: Animal) {
-        this.handleOnAllRestrictedCell(
+        this.handleOnAllAllowedCell(
             (element: Element) => element.classList.remove('restrictedCell')
         )
 
@@ -19,29 +21,50 @@ export default class InteractorHTMLElement {
         cases.forEach(cell => {
             const cellElement = document.getElementById(cell.id)!
             const animalPosition = animal.getPosition()
-            const listener = () => this.board.handleEnter(animal, cell, animalPosition)
-
+            const contextMenuListener = (e?: Event) => this.board.handleSetPosition(animal, cell, e)
+            const clickListener = () => this.board.handleEnter(animal, cell, animalPosition)
+            
             cellElement.classList.add('restrictedCell')
-            cellElement.addEventListener('click', listener, {once: true})
-            this.availableCases?.set(cell.id, listener)
+            cellElement.addEventListener('click', clickListener, {once: true})
+            cellElement.addEventListener('contextmenu', contextMenuListener)
+            this.availableCases?.set(cell.id, [
+                {event: 'click', handler: clickListener},
+                {event: 'contextmenu', handler: contextMenuListener}
+            ])
         })
     }
 
+    public showAnimalPositionModal(cell: Case) {
+        document.querySelector('.selectPosition.active')?.classList.remove('active')
+        const card = document.querySelector(`#${cell.id} .selectPosition`) as HTMLElement
+        const btnClose = card.querySelector('.close')
+        btnClose?.addEventListener('click', function(e: Event) {
+            e.stopPropagation()
+            card.classList.remove('active')
+        })
+        card?.classList.add('active')
+    }
+
+    private handleOnOpenedModal() {
+
+    }
+
+    public hideAnimalPositionModal(cell: Case) {
+        document.querySelector('.selectPosition.active')?.classList.remove('active')
+    }
+
     public clearHiglightCases() {
-        this.handleOnAllRestrictedCell((element, listener) => {
+        this.handleOnAllAllowedCell((element, listeners) => {
             element.classList.remove('restrictedCell')
-            if (listener) {
-                element.removeEventListener('click', listener)
-            }
+            listeners?.forEach(listener => element.removeEventListener(listener.event, listener.handler))
         })
     }
 
     public moveAnimalToCase(animal: Animal, cell: Case, position: AnimalPosition) {
-        this.handleOnAllRestrictedCell((element, listener) => {
+        this.handleOnAllAllowedCell((element, listeners) => {
             element.classList.remove('restrictedCell')
-            if (listener) {
-                element.removeEventListener('click', listener)
-            }
+            listeners?.forEach(listener => element.removeEventListener(listener.event, listener.handler))
+            
         })
         
         if (animal.id === null) {
@@ -57,17 +80,14 @@ export default class InteractorHTMLElement {
         cellElement?.append(animalElement)        
     }
 
-    private handleOnAllRestrictedCell(handle: (element: Element, listener?: () => void) => void) {
+    private handleOnAllAllowedCell(handle: (element: Element, listeners?: ActionsForAvailableCase[]) => void) {
         if (!this.availableCases) {
             return document.querySelectorAll('.restrictedCell')
                 .forEach(element => handle(element))
         }
         
         this.availableCases.forEach(
-            (listenerCell, idCell) => handle(
-                document.getElementById(idCell)!, 
-                listenerCell
-            )
+            (cellActions, cellId) => handle(document.getElementById(cellId)!, cellActions)
         )
     }
 }

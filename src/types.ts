@@ -32,3 +32,8 @@ export type PlayerCase = {
 }
 
 export type CaseContent = ICaseContent | null
+
+export type ActionsForAvailableCase = {
+    event: ('click' | 'contextmenu'),
+    handler: () => void
+}
