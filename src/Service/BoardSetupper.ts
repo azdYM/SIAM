@@ -1,8 +1,8 @@
-import Animal from "./Animal"
-import Case from "./Case"
+import Animal from "../Animal"
+import Case from "../Case"
 import InitializerHTMLElement from "./InitializerHTMLElement"
 import InteractorHTMLElement from "./InteractorHTMLElement"
-import { Area } from "./types"
+import { Area } from "../types"
 
 export default class BoardSetupper {
     constructor(

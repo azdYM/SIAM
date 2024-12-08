@@ -1,13 +1,13 @@
 
 import Case from "./Case";
 import ICaseContent from "./ICaseContent";
-import InteractorHTMLElement from "./InteractorHTMLElement";
+import InteractorHTMLElement from "./Service/InteractorHTMLElement";
 import Player from "./Player";
 import { AnimalName, AnimalPosition, ReservedArea } from "./types";
 
 export default class Animal implements ICaseContent {
     public reservedArea?: ReservedArea
-    public position?: AnimalPosition
+    private position?: AnimalPosition
     private HTMLInteractor?: InteractorHTMLElement
     
     constructor(
@@ -65,13 +65,14 @@ export default class Animal implements ICaseContent {
 
     }
 
-    private handleMove(cell: Case, position: AnimalPosition) {
+    private async handleMove(cell: Case, position: AnimalPosition) {
         if (!this.HTMLInteractor) {
             throw new Error("Le HTMLInteractor n'est activé veuillez l'avtivez en appellant setHTMLInteractor")
         }
 
         this.player.incrementMoveNumber()
-        this.HTMLInteractor.moveAnimalToCase(this, cell, position)
+        await this.HTMLInteractor.moveAnimalToCase(this, cell, position)
+        this.position = position
         this.currentCell = cell
     }
 }

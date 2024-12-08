@@ -33,7 +33,7 @@ export type PlayerCase = {
 
 export type CaseContent = ICaseContent | null
 
-export type ActionsForAvailableCase = {
+export type ActionInHTMLElement = {
     event: ('click' | 'contextmenu'),
     handler: () => void
 }

@@ -1,10 +1,10 @@
-import Animal from "./Animal"
-import Board from "./Board"
-import Case from "./Case"
-import GameManager from "./GameManager"
+import Animal from "../Animal"
+import Board from "../Board"
+import Case from "../Case"
+import GameManager from "../GameManager"
 import InteractorHTMLElement from "./InteractorHTMLElement"
-import Rock from "./Rock"
-import { Area, ReservedArea } from "./types"
+import Rock from "../Rock"
+import { Area, ReservedArea } from "../types"
 
 export default class InitializerHTMLElement {
 
@@ -29,13 +29,42 @@ export default class InitializerHTMLElement {
 
         cases.forEach(cell => {
             const caseElement = this.createCaseElement(cell)
-            caseElement.innerHTML = this.createModalForSelectPosition(cell)
+            caseElement.appendChild(this.createTooltipForSelectPosition(cell))
+
             if (cell.getContent() instanceof Rock) {
                 const rockElement = this.createRockElement(cell.getContent() as Rock)
                 caseElement.appendChild(rockElement)
             }
+
             this.playedArea.appendChild(caseElement)
         })
+    }
+
+    private createTooltipForSelectPosition(cell: Case): HTMLElement {
+        const x: ('left' | 'right') = cell.index % 5 >= 2 ? 'left' : 'right'
+        const y: ('top' | 'bottom') = cell.index < 15 ? "top" : "bottom"
+        const tooltip = document.createElement('div')
+        // const after = tooltip.querySelector('::after') as HTMLElement
+        tooltip.classList.add("selectPosition")
+        tooltip.style[x] = '-103px'
+        tooltip.style[y] = '0'
+        tooltip.innerHTML = this.getTooltipContent()
+        return tooltip
+    }
+
+    private getTooltipContent() {
+        return `
+            <div class="positionContent">
+                <p>Position de l'animal</p>
+                <div class="btnsPosition">
+                    <button data-position="top" class="btnPosition top">Haut</button>
+                    <button data-position="right" class="btnPosition right">Droit</button>
+                    <button data-position="bottom" class="btnPosition bottom">Bas</button>
+                    <button data-position="left" class="btnPosition left">Gauche</button>
+                </div>
+            </div>
+            <button class="close">fermer</button>
+        `
     }
 
     private createReserveAreaCases(cases: Case[]) {
@@ -77,24 +106,6 @@ export default class InitializerHTMLElement {
         return child
     }
 
-    private createModalForSelectPosition(cell: Case): string {
-        const x: ('left' | 'right') = cell.index % 5 >= 2 ? 'left' : 'right'
-        const y: ('top' | 'bottom') = cell.index < 15 ? "top" : "bottom"
-        
-        return `
-            <div style="${x}: -103px; ${y}: 0" class="selectPosition">
-                <div class="positionContent">
-                    <p>Position de l'animal</p>
-                    <span class="">Haut</span>
-                    <span class="">Droit</span>
-                    <span class="">Bas</span>
-                    <span class="">Gauche</span>
-                </div>
-                <button class="close">fermer</button>
-            </div>
-        `
-    }
-
     private createAnimalElement(animal: Animal): Node {
         animal.setHTMLInteractor(this.HTMLInteractor)        
         const animalElement = document.createElement('button')
@@ -110,7 +121,7 @@ export default class InitializerHTMLElement {
         animalElement.addEventListener('click', handleClick, false)
 
         if (animal.reservedArea === 'top') {
-            image.style.transform = 'rotate(180deg)'
+            animalElement.style.transform = 'rotate(180deg)'
         }
         image.setAttribute('src', `/public/images/${animal.reservedArea}-${animal.currentCell.index+1}.png`)
     

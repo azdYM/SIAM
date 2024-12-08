@@ -78,13 +78,21 @@ h1 {
   color: black;
 }
 
-.selectPosition .positionContent {
+.btnsPosition {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-items: center;
 }
 
+.selectPosition .positionContent::after {
+  position: absolute;
+  content: "";
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  transform: translateY(-50%) rotate(45deg);
+}
 .selectPosition .close {
   position: absolute;
   top: -10px;

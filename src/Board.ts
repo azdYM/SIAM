@@ -2,7 +2,7 @@ import Case from "./Case"
 import Animal from "./Animal"
 import { AnimalPosition } from "./types"
 import Game from "./Game"
-import BoardSetupper from "./BoardSetupper"
+import BoardSetupper from "./Service/BoardSetupper"
 
 export default class Board {
     static CASE_SIZE = 61
@@ -29,9 +29,9 @@ export default class Board {
         this.boardSetupper.setupArea(reserveCases, 'reserve')
     }
 
-    public handleSetPosition(animal: Animal, cell: Case, e?: Event) {
+    public openAnimalPositionTooltip(animal: Animal, cell: Case, e?: Event) {
         e?.preventDefault()
-        cell.openAnimalPositionModal()
+        cell.openAnimalPositionTooltip(animal)
     }
 
     public handleEnter(animal: Animal, cell: Case, position: AnimalPosition) {

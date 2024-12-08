@@ -1,4 +1,5 @@
-import InteractorHTMLElement from "./InteractorHTMLElement";
+import Animal from "./Animal";
+import InteractorHTMLElement from "./Service/InteractorHTMLElement";
 import { Area, CaseContent, ReservedArea } from "./types";
 
 export default class Case {
@@ -25,8 +26,8 @@ export default class Case {
         return this.currentContent
     }
 
-    public openAnimalPositionModal() {
-        this.HTMLInteractor?.showAnimalPositionModal(this)
+    public openAnimalPositionTooltip(animal: Animal) {
+        this.HTMLInteractor?.showAnimalPositionTooltip(this, animal)
     }
 
     public updateCurrentContent(content: CaseContent) {

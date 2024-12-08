@@ -1,14 +1,14 @@
-import Animal from "./Animal"
-import Board from "./Board"
+import Animal from "../Animal"
+import Board from "../Board"
 import BoardSetupper from "./BoardSetupper"
-import Case from "./Case"
-import Game from "./Game"
-import GameManager from "./GameManager"
+import Case from "../Case"
+import Game from "../Game"
+import GameManager from "../GameManager"
 import InitializerHTMLElement from "./InitializerHTMLElement"
 import InteractorHTMLElement from "./InteractorHTMLElement"
-import Player from "./Player"
-import Rock from "./Rock"
-import { AnimalName, Area, BoardSection, PlayerDataEntry, ReservedArea } from "./types"
+import Player from "../Player"
+import Rock from "../Rock"
+import { AnimalName, Area, BoardSection, PlayerDataEntry, ReservedArea } from "../types"
 
 export function createGame(boardElements: BoardSection, players: PlayerDataEntry[]): Game {
     const game = new Game(new GameManager())

@@ -1,6 +1,6 @@
 import Animal from "./Animal";
 import Case from "./Case";
-import { createAnimal, createCase, createRock } from "./factory";
+import { createAnimal, createCase, createRock } from "./Service/factory";
 import Game from "./Game";
 import { AnimalName, Area, CaseContent, ReservedArea } from "./types";
 import { getThreeMiddleElements } from "./utils";
