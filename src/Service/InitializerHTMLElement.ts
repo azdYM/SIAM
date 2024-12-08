@@ -44,11 +44,16 @@ export default class InitializerHTMLElement {
         const x: ('left' | 'right') = cell.index % 5 >= 2 ? 'left' : 'right'
         const y: ('top' | 'bottom') = cell.index < 15 ? "top" : "bottom"
         const tooltip = document.createElement('div')
-        // const after = tooltip.querySelector('::after') as HTMLElement
+        const viewer = document.createElement('span')
         tooltip.classList.add("selectPosition")
-        tooltip.style[x] = '-103px'
+        viewer.classList.add('viewer')
+
+        tooltip.style[x] = '-110px'
         tooltip.style[y] = '0'
+        viewer.style[x] = '92px'
+        viewer.style[y] = '15%'
         tooltip.innerHTML = this.getTooltipContent()
+        tooltip.appendChild(viewer)
         return tooltip
     }
 
@@ -126,7 +131,6 @@ export default class InitializerHTMLElement {
         image.setAttribute('src', `/public/images/${animal.reservedArea}-${animal.currentCell.index+1}.png`)
     
         animalElement.appendChild(image)
-        
         return animalElement as Node
     }
 
