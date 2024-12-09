@@ -37,3 +37,7 @@ export type ActionInHTMLElement = {
     event: ('click' | 'contextmenu'),
     handler: () => void
 }
+
+export type GridCasesType = Map<number, Case>
+export type ReserveCasesType = Map<{index: number, area: ReservedArea}, Case>
+export type VirtualGridType = Map<number, ('E' | 'R' | 'RO' | null)>

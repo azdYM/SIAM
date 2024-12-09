@@ -54,7 +54,6 @@ export default class InteractorHTMLElement {
             e?.stopPropagation()
             const element = e?.currentTarget as HTMLElement
             const position = element.dataset.position as AnimalPosition
-            console.log(position, "selected position")
             this.board.handleEnter(animal, cell, position)
         }
 
@@ -77,7 +76,9 @@ export default class InteractorHTMLElement {
 
     public hideAnimalPositionTooltip() {
         this.handleOnOpenTooltip((element, listener) => {
-            element.removeEventListener(listener.event, listener.handler)
+            if (element) {
+                element.removeEventListener(listener.event, listener.handler)
+            }
         })
         document.querySelector('.selectPosition.active')?.classList.remove('active')
     }
@@ -103,7 +104,6 @@ export default class InteractorHTMLElement {
         const cellElement = document.getElementById(cell.id)
 
         const angle = this.angleCalculator.getAngleFrom(position)
-        console.log(animal.getPosition(), position, angle, "calcule angle")
         animalElement.style.transform = `rotate(${angle})`
         
         currentCellElement?.removeChild<HTMLElement>(animalElement)
@@ -125,7 +125,7 @@ export default class InteractorHTMLElement {
 
     private handleOnOpenTooltip(handle: (element: HTMLElement, listener: ActionInHTMLElement) => void) {
         if (this.selectedTooltipForPosition.size === 0)
-            return
+            return 
 
         this.selectedTooltipForPosition?.forEach(
             (btnAction, selector) => handle(document.querySelector(selector)!, btnAction)

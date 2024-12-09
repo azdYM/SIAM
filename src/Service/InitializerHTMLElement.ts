@@ -1,10 +1,9 @@
 import Animal from "../Animal"
-import Board from "../Board"
 import Case from "../Case"
-import GameManager from "../GameManager"
 import InteractorHTMLElement from "./InteractorHTMLElement"
 import Rock from "../Rock"
 import { Area, ReservedArea } from "../types"
+import BoardSetupper from "./BoardSetupper"
 
 export default class InitializerHTMLElement {
 
@@ -24,8 +23,8 @@ export default class InitializerHTMLElement {
     }
 
     private createGridAreaCases(cases: Case[]) {
-        this.playedArea.style.top = `${Board.TOP_SPACE}px`
-        this.playedArea.style.left = `${Board.LEFT_SPACE}px`
+        this.playedArea.style.top = `${BoardSetupper.TOP_SPACE}px`
+        this.playedArea.style.left = `${BoardSetupper.LEFT_SPACE}px`
 
         cases.forEach(cell => {
             const caseElement = this.createCaseElement(cell)
@@ -88,7 +87,7 @@ export default class InitializerHTMLElement {
     
     private initReserveAreaElement(element: HTMLDivElement, reservedArea: ReservedArea, cases: Case[]) {
         element.style[reservedArea] = '30px'
-        element.style.left = `${Board.LEFT_SPACE}px`
+        element.style.left = `${BoardSetupper.LEFT_SPACE}px`
 
         cases.forEach(cell => {
             const caseElement = this.createCaseElement(cell)
@@ -101,13 +100,13 @@ export default class InitializerHTMLElement {
     private createCaseElement(cell: Case) {
         cell.setHTMLInteractor(this.HTMLInteractor)
         const child = document.createElement('div')
-        const row = Math.trunc(cell.index / GameManager.CASE_COLUMN_NUMBER)
-        const column = cell.index % GameManager.CASE_COLUMN_NUMBER
+        const row = Math.trunc(cell.index / BoardSetupper.CASE_COLUMN_NUMBER)
+        const column = cell.index % BoardSetupper.CASE_COLUMN_NUMBER
     
         child.setAttribute('id', cell.id)
         child.setAttribute('data-index', String(cell.index))
-        child.style.left = `${column * Board.CASE_SIZE}px`
-        child.style.top = `${row * Board.CASE_SIZE}px`
+        child.style.left = `${column * BoardSetupper.CASE_SIZE}px`
+        child.style.top = `${row * BoardSetupper.CASE_SIZE}px`
         return child
     }
 

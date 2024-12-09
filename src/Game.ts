@@ -2,15 +2,13 @@ import Animal from './Animal.ts'
 import Board from './Board.ts'
 import Case from './Case.ts'
 import GameManager from './GameManager.ts'
-import Player from './Player.ts'
 import { AnimalPosition, PlayerByArea } from './types.ts'
 
 export default class Game {
 
   private players?: PlayerByArea
-  private currentPlayer?: Player
-  private selectedAnimal?: Animal
   public board?: Board
+  private selectedAnimal?: Animal
 
   constructor(
     private gameManager: GameManager
@@ -19,32 +17,21 @@ export default class Game {
   public start() {
     if (!this.players) throw new Error('Les joueurs ne sont pas définit')
     if (!this.board) throw new Error("Le plateau n'est pas définit")
-    this.init()
-    this.setTurn(this.players.get('bottom')!)
+    this.board.setupSections()
+    this.gameManager.init(this)
   }
 
-  private init() {
-    this.gameManager.initGame(this)
-    this.board!.setupSections(
-      this.gameManager.getGridCases(), 
-      this.gameManager.getReserveCases()
-    )
-  }
-
-  public setTurn(nextPlayer?: Player) {
-    this.currentPlayer?.setTurn(false)
-    this.currentPlayer = nextPlayer?.setTurn(true)
-  }
-
-  public move(animal: Animal, cell: Case, position: AnimalPosition) {
+  public play(animal: Animal, cell: Case, position: AnimalPosition) {
     if (this.gameManager.canEnterAnimal(animal, cell)) {
       animal.enterOnBoard(cell, position)
-      return this.next()
+      this.board?.updateVirtualGrid(cell.index, animal)
+      return this.gameManager.next()
     }
 
     if (this.gameManager.canMoveAnimal(animal, cell)) {
       animal.moveToEmptyCase(cell, position)
-      return this.next()
+      this.board?.updateVirtualGrid(cell.index, animal)
+      return this.gameManager.next()
     }
 
     if (this.gameManager.canMoveAnimalAndPushContent()) {
@@ -53,13 +40,9 @@ export default class Game {
         throw new Error('Ce case ne contient ni animal ni rochet')
       }
       animal.moveWithPush(caseContent)
-      return this.next()
+      this.board?.updateVirtualGrid(cell.index, animal)
+      return this.gameManager.next()
     }
-  }
-
-  private next() {
-    const nexPlayerArea = this.currentPlayer?.area === 'bottom' ? 'top' : 'bottom'
-    return this.setTurn(this.players?.get(nexPlayerArea))
   }
 
   public isSameAnimalSelected(animal: Animal) {
@@ -73,7 +56,7 @@ export default class Game {
 
   public getAvailableCases(moveNumber: number): Case[] {
     if (!this.selectedAnimal) throw new Error('Aucun animal sélectionner')
-    return this.gameManager.getAvailableCasesForSelectedAnimal(this.selectedAnimal, moveNumber)
+    return this.board!.getAvailableCasesForSelectedAnimal(this.selectedAnimal, moveNumber)
   }
 
   public setPlayers(playerBySide: PlayerByArea) {
