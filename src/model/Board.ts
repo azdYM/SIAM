@@ -86,6 +86,10 @@ export default class Board {
             return
         }
 
+        if (cell.isReserve()) {
+            position = animal.reservedArea === 'bottom' ? 'top' : 'bottom'
+        }
+
         this.game!.play(animal, cell, position)
     }
 
@@ -107,7 +111,8 @@ export default class Board {
             return this.getEntryPointsForArea(animalCell.reservedArea!, moveNumber)
         }
 
-        return [...this.getAdjacentCases(animalCell, moveNumber), animalCell]
+        const reservedCase = this.reserveCases.get(animal.reservedCellId)!
+        return [...this.getAdjacentCases(animalCell, moveNumber), animalCell, reservedCase]
     }
 
     private getAdjacentCases(cell: Case, moveNumber: number): Case[] {
