@@ -26,6 +26,10 @@ export default class Animal implements ICaseContent {
         return this.id
     }
 
+    isSelected() {
+        this.player.getCurrentSession().isSameAnimalSelected(this)
+    }
+
     public getCurrentCell(): Case {
         return this.currentCell
     }

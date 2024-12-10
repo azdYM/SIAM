@@ -134,7 +134,7 @@ export default class InitializerHTMLElement {
     }
 
     private createRockElement(rock: Rock) {
-        const rockElement = document.createElement('button')
+        const rockElement = document.createElement('span')
         rockElement.setAttribute('class', 'caseContent')
         const image = document.createElement('img')
         

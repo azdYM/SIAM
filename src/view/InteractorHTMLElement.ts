@@ -17,12 +17,15 @@ export default class InteractorHTMLElement {
 
     public highlightCasesAndSetEventForAnimal(cases: Case[], animal: Animal) {
         this.handleOnAllAllowedCell(
-            (element: Element) => element.classList.remove('restrictedCell')
+            (element: Element) => element.classList.remove('restrictedCell', 'clCliquable')
         )
 
         if (!this.availableCases) {
             this.availableCases = new Map()
         }
+
+        document.querySelector('.animalSelected')?.classList.remove('animalSelected')
+        document.getElementById(animal.id)?.classList.add('animalSelected')
 
         cases.forEach(cell => {
             const cellElement = document.getElementById(cell.id)!
@@ -30,7 +33,7 @@ export default class InteractorHTMLElement {
             const contextMenuListener = (e?: Event) => this.board.openAnimalPositionTooltip(animal, cell, e)
             const clickListener = () => this.board.handleEnter(animal, cell, animalPosition)
             
-            cellElement.classList.add('restrictedCell')
+            cellElement.classList.add('restrictedCell', 'clCliquable')
             cellElement.addEventListener('click', clickListener, {once: true})
             cellElement.addEventListener('contextmenu', contextMenuListener)
             this.availableCases?.set(cell.id, [
@@ -85,14 +88,15 @@ export default class InteractorHTMLElement {
 
     public clearHiglightCases() {
         this.handleOnAllAllowedCell((element, listeners) => {
-            element.classList.remove('restrictedCell')
+            element.classList.remove('restrictedCell', 'clCliquable')
             listeners?.forEach(listener => element.removeEventListener(listener.event, listener.handler))
         })
     }
 
     public async moveAnimalToCase(animal: Animal, cell: Case, position: AnimalPosition) {
         this.clearHiglightCases()
-        this.hideAnimalPositionTooltip()     
+        this.hideAnimalPositionTooltip() 
+        document.querySelector('.clSelection')?.classList.remove('clSelection')    
         
         if (animal.id === null) {
             console.warn(`L'animal ${animal.name} dans la case ${cell.index} n'a pas d'identifiant`)
@@ -102,6 +106,7 @@ export default class InteractorHTMLElement {
         const animalElement = document.getElementById(animal.id)!
         const currentCellElement = document.getElementById(animal.currentCell.id)
         const cellElement = document.getElementById(cell.id)
+        cellElement?.classList.add('clSelection')
 
         const angle = this.angleCalculator.getAngleFrom(position)
         animalElement.style.transform = `rotate(${angle})`
