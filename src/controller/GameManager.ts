@@ -1,7 +1,7 @@
-import Animal from "./Animal";
-import Case from "./Case";
+import Animal from "../model/Animal";
+import Case from "../model/Case";
 import Game from "./Game";
-import Player from "./Player";
+import Player from "../model/Player";
 
 
 export default class GameManager {

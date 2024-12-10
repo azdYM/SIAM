@@ -1,8 +1,8 @@
 import Case from "./Case"
 import Animal from "./Animal"
-import { AnimalPosition, CaseContent, GridCasesType, ReserveCasesType, ReservedArea, VirtualGridType } from "./types"
-import Game from "./Game"
-import BoardSetupper from "./Service/BoardSetupper"
+import { AnimalPosition, CaseContent, GridCasesType, ReserveCasesType, ReservedArea, VirtualGridType } from "../types"
+import Game from "../controller/Game"
+import BoardSetupper from "../service/BoardSetupper"
 
 
 export default class Board {

@@ -1,5 +1,5 @@
 import './style.css'
-import { createGame } from './Service/factory'
+import { createGame } from './service/factory'
 import { BoardSection, PlayerDataEntry } from './types'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `

@@ -1,9 +1,9 @@
 
 import Case from "./Case";
 import ICaseContent from "./ICaseContent";
-import InteractorHTMLElement from "./Service/InteractorHTMLElement";
+import InteractorHTMLElement from "../view/InteractorHTMLElement";
 import Player from "./Player";
-import { AnimalName, AnimalPosition, ReservedArea } from "./types";
+import { AnimalName, AnimalPosition, ReservedArea } from "../types";
 
 export default class Animal implements ICaseContent {
     public reservedArea?: ReservedArea

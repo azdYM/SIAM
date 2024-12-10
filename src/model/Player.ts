@@ -1,6 +1,6 @@
 import Animal from "./Animal"
-import Game from "./Game"
-import { ReservedArea } from "./types"
+import Game from "../controller/Game"
+import { ReservedArea } from "../types"
 
 export default class Player {
     public isMyTurn: boolean = false

@@ -1,9 +1,9 @@
-import Animal from "../Animal"
-import Case from "../Case"
+import Animal from "../model/Animal"
+import Case from "../model/Case"
+import Rock from "../model/Rock"
 import InteractorHTMLElement from "./InteractorHTMLElement"
-import Rock from "../Rock"
 import { Area, ReservedArea } from "../types"
-import BoardSetupper from "./BoardSetupper"
+import BoardSetupper from "../service/BoardSetupper"
 
 export default class InitializerHTMLElement {
 

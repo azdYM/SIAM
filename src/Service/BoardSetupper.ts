@@ -1,10 +1,10 @@
-import Animal from "../Animal"
-import Case from "../Case"
-import InitializerHTMLElement from "./InitializerHTMLElement"
-import InteractorHTMLElement from "./InteractorHTMLElement"
+import Animal from "../model/Animal"
+import Case from "../model/Case"
+import InitializerHTMLElement from "../view/InitializerHTMLElement"
+import InteractorHTMLElement from "../view/InteractorHTMLElement"
 import { AnimalName, GridCasesType, PlayerByArea, ReserveCasesType, VirtualGridType } from "../types"
 import { getThreeMiddleElements } from "../utils"
-import { createAnimal, createCase, createRock } from "./factory"
+import { createAnimal, createCase, createRock } from "../service/factory"
 
 export default class BoardSetupper {
     static CASE_SIZE = 61

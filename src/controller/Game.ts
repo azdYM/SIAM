@@ -1,8 +1,8 @@
-import Animal from './Animal.ts'
-import Board from './Board.ts'
-import Case from './Case.ts'
+import Animal from '../model/Animal.ts'
+import Board from '../model/Board.ts'
+import Case from '../model/Case.ts'
 import GameManager from './GameManager.ts'
-import { AnimalPosition, PlayerByArea } from './types.ts'
+import { AnimalPosition, PlayerByArea } from '../types.ts'
 
 export default class Game {
 

@@ -1,8 +1,8 @@
-import Animal from "../Animal";
-import Board from "../Board";
-import Case from "../Case";
+import Animal from "../model/Animal";
+import Board from "../model/Board";
+import Case from "../model/Case";
 import { ActionInHTMLElement, AnimalPosition } from "../types";
-import AngleCalculator from "./AngleCalculator";
+import AngleCalculator from "../service/AngleCalculator";
 
 export default class InteractorHTMLElement {
 

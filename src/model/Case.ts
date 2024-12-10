@@ -1,6 +1,6 @@
 import Animal from "./Animal";
-import InteractorHTMLElement from "./Service/InteractorHTMLElement";
-import { Area, CaseContent, ReservedArea } from "./types";
+import InteractorHTMLElement from "../view/InteractorHTMLElement";
+import { Area, CaseContent, ReservedArea } from "../types";
 
 export default class Case {
 

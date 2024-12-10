@@ -1,8 +1,8 @@
 import Animal from "./Animal"
-import Case from "./Case"
+import Case from "./model/Case"
 import ICaseContent from "./ICaseContent"
 
-import Player from "./Player"
+import Player from "./model/Player"
 import Rock from "./Rock"
 
 export type Area = ('reserve' | 'grid')
