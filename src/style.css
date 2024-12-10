@@ -143,3 +143,7 @@ h1 {
   background-color: #535bf2;
   cursor: pointer;
 }
+
+.restrictedCell > button {
+  z-index: -1;
+}

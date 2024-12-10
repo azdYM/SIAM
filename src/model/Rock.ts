@@ -3,7 +3,7 @@ import ICaseContent from "./ICaseContent";
 
 export default class Rock implements ICaseContent {
     constructor(
-        private id: string,
+        public id: string,
         public cell: Case,
     ) {}
 
@@ -13,6 +13,10 @@ export default class Rock implements ICaseContent {
 
     getInitialName(): ("RO" | "E" | "R") {
         return "RO"
+    }
+
+    getId() {
+        return this.id
     }
     
 }

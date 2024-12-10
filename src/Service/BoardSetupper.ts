@@ -73,7 +73,7 @@ export default class BoardSetupper {
                 const animal = createAnimal(idAnimal, name, cell, player)
                 
                 cell.updateCurrentContent(animal)
-                reserveCases.set({index: cellIndex, area}, cell)
+                reserveCases.set(idCase, cell)
             }
         }
 

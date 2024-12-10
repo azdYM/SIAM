@@ -6,7 +6,8 @@ import Player from "./Player";
 import { AnimalName, AnimalPosition, ReservedArea } from "../types";
 
 export default class Animal implements ICaseContent {
-    public reservedArea?: ReservedArea
+    public reservedArea: ReservedArea
+    public reservedCellId: string
     private position?: AnimalPosition
     private HTMLInteractor?: InteractorHTMLElement
     
@@ -17,7 +18,12 @@ export default class Animal implements ICaseContent {
         public player: Player,
     ) {
         this.position = currentCell.reservedArea === 'bottom' ? 'top' : 'bottom'
-        this.reservedArea = currentCell.reservedArea
+        this.reservedArea = currentCell.reservedArea!
+        this.reservedCellId = currentCell.id
+    }
+
+    getId() {
+        return this.id
     }
 
     public getCurrentCell(): Case {

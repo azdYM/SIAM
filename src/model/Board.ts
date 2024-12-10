@@ -49,7 +49,6 @@ export default class Board {
         this.reserveCases = section.reserveCases
     }
 
-
     public openAnimalPositionTooltip(animal: Animal, cell: Case, e?: Event) {
         e?.preventDefault()
         cell.openAnimalPositionTooltip(animal)
@@ -78,6 +77,15 @@ export default class Board {
     }
 
     public handleEnter(animal: Animal, cell: Case, position: AnimalPosition) {
+        if (animal.getPosition() === position && animal.currentCell === cell) {
+            return
+        }
+
+        if (!this.isAvailable(cell) && animal.currentCell !== cell) {
+            console.warn("La case que vous voulez vous déplacez, n'est pas disponible")
+            return
+        }
+
         this.game!.play(animal, cell, position)
     }
 
@@ -89,18 +97,6 @@ export default class Board {
         this.boardSetupper?.clearHiglightCases()
     }
 
-    public getGridCases() {
-        return Array.from(this.gridCases.values())
-    }
-
-    public getReserveCases() {
-        return Array.from(this.reserveCases.values())
-    }
-
-    public getPlayableCases(): Map<number, Case | null> {
-        return this.gridCases
-    }
-
     public getAvailableCasesForSelectedAnimal(animal: Animal, moveNumber: number) {
         const animalCell = animal.currentCell
         if (!animalCell) {
@@ -110,8 +106,8 @@ export default class Board {
         if (animalCell.isReserve()) {
             return this.getEntryPointsForArea(animalCell.reservedArea!, moveNumber)
         }
-        
-        return this.getAdjacentCases(animalCell, moveNumber)
+
+        return [...this.getAdjacentCases(animalCell, moveNumber), animalCell]
     }
 
     private getAdjacentCases(cell: Case, moveNumber: number): Case[] {
@@ -149,8 +145,24 @@ export default class Board {
             .map(caseIndex => this.gridCases.get(caseIndex)!)
     }
 
-    private isAvailable(cell: Case) {
-        return true
+    public isAvailable(cell: Case) {
+        if (this.virtualGrid.get(cell.index) === null) {
+            return true
+        }
+
+        return false
+    }
+
+    public getGridCases() {
+        return Array.from(this.gridCases.values())
+    }
+
+    public getReserveCases() {
+        return Array.from(this.reserveCases.values())
+    }
+
+    public getPlayableCases(): Map<number, Case | null> {
+        return this.gridCases
     }
 
     

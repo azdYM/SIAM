@@ -1,9 +1,6 @@
-import Animal from "./Animal"
 import Case from "./model/Case"
-import ICaseContent from "./ICaseContent"
-
+import ICaseContent from "./model/ICaseContent"
 import Player from "./model/Player"
-import Rock from "./Rock"
 
 export type Area = ('reserve' | 'grid')
 
@@ -26,12 +23,12 @@ export type BoardSection = {
     bottomReserveArea: HTMLDivElement | null
 }
 
+export type CaseContent = ICaseContent | null
+
 export type PlayerCase = {
     cell: Case,
     player: Player
 }
-
-export type CaseContent = ICaseContent | null
 
 export type ActionInHTMLElement = {
     event: ('click' | 'contextmenu'),
@@ -39,5 +36,5 @@ export type ActionInHTMLElement = {
 }
 
 export type GridCasesType = Map<number, Case>
-export type ReserveCasesType = Map<{index: number, area: ReservedArea}, Case>
+export type ReserveCasesType = Map<string, Case>
 export type VirtualGridType = Map<number, ('E' | 'R' | 'RO' | null)>

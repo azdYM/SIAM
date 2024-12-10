@@ -4,7 +4,7 @@ import { Area, CaseContent, ReservedArea } from "../types";
 
 export default class Case {
 
-    private currentContent: CaseContent = null
+    private currentContent: CaseContent|null = null
     private HTMLInteractor?: InteractorHTMLElement
 
     constructor(
