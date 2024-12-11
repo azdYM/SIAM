@@ -94,10 +94,7 @@ export default class InteractorHTMLElement {
     }
 
     public async moveAnimalToCase(animal: Animal, cell: Case, position: AnimalPosition) {
-        this.clearHiglightCases()
-        this.hideAnimalPositionTooltip() 
-        document.querySelector('.clSelection')?.classList.remove('clSelection')    
-        
+        this.resetLastAction()
         if (animal.id === null) {
             console.warn(`L'animal ${animal.name} dans la case ${cell.index} n'a pas d'identifiant`)
             return 
@@ -113,6 +110,20 @@ export default class InteractorHTMLElement {
         
         currentCellElement?.removeChild<HTMLElement>(animalElement)
         cellElement?.append(animalElement)   
+    }
+
+    private resetLastAction() {
+        this.clearHiglightCases()
+        this.hideAnimalPositionTooltip() 
+        document.querySelector('.clSelection')?.classList.remove('clSelection')    
+        Array.from(this.board.getAnimals().values()).forEach(animal => {
+            const animalElement = document.getElementById(animal.id)
+            if (animal.player.isMyTurn) {
+                animalElement?.classList.remove('anCliquable')
+            } else {
+                animalElement?.classList.add('anCliquable')
+            }
+        })
     }
 
     private handleOnAllAllowedCell(handle: (element: Element, listeners?: ActionInHTMLElement[]) => void) {

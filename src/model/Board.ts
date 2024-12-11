@@ -15,6 +15,8 @@ export default class Board {
 
     private reserveCases: ReserveCasesType = new Map() 
 
+    private animales: Map<string, Animal> = new Map()
+
     /**
      * Garder l'état global du jeu en temps réel
      * 
@@ -47,6 +49,16 @@ export default class Board {
         this.virtualGrid = section.virtualGrid
         this.gridCases = section.gridCases
         this.reserveCases = section.reserveCases
+        this.setAnimals()
+    }
+
+    private setAnimals() {
+        this.reserveCases.forEach(reserveCell => {
+            const animal = reserveCell.getContent()
+            if (animal instanceof Animal) {
+                this.animales.set(animal.id, animal)
+            }
+        })
     }
 
     public openAnimalPositionTooltip(animal: Animal, cell: Case, e?: Event) {
@@ -170,5 +182,7 @@ export default class Board {
         return this.gridCases
     }
 
-    
+    public getAnimals(): Map<string, Animal> {
+        return this.animales
+    }
 }

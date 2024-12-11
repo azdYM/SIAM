@@ -123,6 +123,10 @@ export default class InitializerHTMLElement {
         animalElement.setAttribute('class', 'caseContent')
         animalElement.setAttribute('id', animal.id)        
         animalElement.addEventListener('click', handleClick, false)
+        
+        if (animal.canMove()) {
+            animalElement.classList.add('anCliquable')
+        }
 
         if (animal.reservedArea === 'top') {
             animalElement.style.transform = 'rotate(180deg)'

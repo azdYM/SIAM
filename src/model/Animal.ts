@@ -26,10 +26,6 @@ export default class Animal implements ICaseContent {
         return this.id
     }
 
-    isSelected() {
-        this.player.getCurrentSession().isSameAnimalSelected(this)
-    }
-
     public getCurrentCell(): Case {
         return this.currentCell
     }
@@ -37,6 +33,10 @@ export default class Animal implements ICaseContent {
     public getInitialName(): ("RO" | "E" | "R") {
         if (this.name === 'Eléphan') return "E"
         return "R"
+    }
+
+    public canMove() {
+        return this.player.isMyTurn
     }
 
     public onMove() {

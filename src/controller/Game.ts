@@ -17,21 +17,21 @@ export default class Game {
   public start() {
     if (!this.players) throw new Error('Les joueurs ne sont pas définit')
     if (!this.board) throw new Error("Le plateau n'est pas définit")
-    this.board.setupSections()
     this.gameManager.init(this)
+    this.board.setupSections()
   }
 
   public play(animal: Animal, cell: Case, position: AnimalPosition) {
     if (this.gameManager.canEnterAnimal(animal, cell)) {
       animal.enterOnBoard(cell, position)
-      this.board?.updateVirtualGrid(cell.index, animal)
-      return this.gameManager.next()
+      this.gameManager.next()
+      return this.board?.updateVirtualGrid(cell.index, animal)
     }
 
     if (this.gameManager.canMoveAnimal(animal, cell)) {
       animal.moveToEmptyCase(cell, position)
-      this.board?.updateVirtualGrid(cell.index, animal)
-      return this.gameManager.next()
+      this.gameManager.next()
+      return this.board?.updateVirtualGrid(cell.index, animal)
     }
 
     if (this.gameManager.canMoveAnimalAndPushContent()) {
@@ -40,8 +40,8 @@ export default class Game {
         throw new Error('Ce case ne contient ni animal ni rochet')
       }
       animal.moveWithPush(caseContent)
-      this.board?.updateVirtualGrid(cell.index, animal)
-      return this.gameManager.next()
+      this.gameManager.next()
+      return this.board?.updateVirtualGrid(cell.index, animal)
     }
   }
 

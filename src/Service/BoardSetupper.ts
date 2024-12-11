@@ -8,7 +8,7 @@ import { createAnimal, createCase, createRock } from "../service/factory"
 
 export default class BoardSetupper {
     static CASE_SIZE = 61
-    static LEFT_SPACE = 13
+    static LEFT_SPACE = 12
     static TOP_SPACE = 99
     static CASE_COLUMN_NUMBER = 5
     static CASE_ROW_NUMBER = 5
