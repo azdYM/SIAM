@@ -2,7 +2,7 @@ import Animal from '../model/Animal.ts'
 import Board from '../model/Board.ts'
 import Case from '../model/Case.ts'
 import GameManager from './GameManager.ts'
-import { AnimalPosition, GridCasesType, PlayerByArea } from '../types.ts'
+import { AnimalPosition, PlayerByArea } from '../types.ts'
 
 export default class Game {
 
@@ -41,7 +41,7 @@ export default class Game {
         throw new Error('Ce case ne contient ni animal ni rochet')
       }
 
-      const toCase = this.board?.findNextCaseInDirection(cell.index, direction)
+      const toCase = this.getNextCaseInDirection(cell.index, direction)
       if (toCase === undefined) {
         console.warn(`Impossible de déplacer ${animal.id}`)
         return
@@ -51,6 +51,10 @@ export default class Game {
       animal.moveWithPush(caseContent)
       return this.gameManager.next()
     }
+  }
+
+  public getNextCaseInDirection(cellIndex: number, direction: AnimalPosition) {
+    return this.board?.findNextCaseInDirection(cellIndex, direction)
   }
 
   public isSameAnimalSelected(animal: Animal) {

@@ -68,6 +68,10 @@ export default class Board {
     }
 
     private getEnterAllowedCases(moveNumber: number, area?: ReservedArea) {
+        if (area) {
+            // a implèmentation des régles, s'il y en a
+        }
+
         return this.getGridCases().filter(cell => {
             if (moveNumber >= 2) {
                 return [...this.morePlayableCasesAfterTwoTurns, ...this.playableCasesAtStart].includes(cell.index)
@@ -90,20 +94,22 @@ export default class Board {
 
     public updateGridWhenPush(animal: Animal, pushed: ICaseContent, nextPushedCase: Case) {
 
-        const lastAnimalCaseIndex = animal.getCurrentCell().index
-        const lastPushedCaseIndex = pushed.getCurrentCell().index
+        const lastAnimalCase = animal.getCurrentCell()
+        const lastPushedCase = pushed.getCurrentCell()
 
         // 1. Mets à jour la cellule actuelle de l'animal
-        animal.updateCurrentCell(this.gridCases.get(lastPushedCaseIndex)!)
-        this.gridCases.get(lastAnimalCaseIndex)?.updateCurrentContent()
+        animal.updateCurrentCell(lastPushedCase)
+        lastAnimalCase.updateCurrentContent()
+        lastPushedCase.updateCurrentContent(animal)
+
 
         // 2. Mets à jour la cellule actuelle du contenu poussé
         nextPushedCase.updateCurrentContent(pushed);
         pushed.updateCurrentCell(nextPushedCase);
 
         // 3. Mets à jour les grilles virtuelles
-        this.virtualGrid.set(lastAnimalCaseIndex, null);
-        this.virtualGrid.set(lastPushedCaseIndex, animal.getInitialName())
+        this.virtualGrid.set(lastAnimalCase.index, null);
+        this.virtualGrid.set(lastPushedCase.index, animal.getInitialName())
         this.virtualGrid.set(nextPushedCase.index, pushed.getInitialName())
     }
 
