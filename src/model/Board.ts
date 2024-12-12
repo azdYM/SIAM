@@ -3,6 +3,7 @@ import Animal from "./Animal"
 import { AnimalPosition, CaseContent, GridCasesType, ReserveCasesType, ReservedArea, VirtualGridType } from "../types"
 import Game from "../controller/Game"
 import BoardSetupper from "../service/BoardSetupper"
+import ICaseContent from "./ICaseContent"
 
 
 export default class Board {
@@ -76,11 +77,34 @@ export default class Board {
         })
     }
 
-    public updateVirtualGrid(newCaseIndex: number, caseContent: CaseContent) {
-        let lastCaseIndex = caseContent!.getCurrentCell().index
-        
-        this.virtualGrid.set(lastCaseIndex, null)
-        this.virtualGrid.set(newCaseIndex, caseContent!.getInitialName())
+    public updateGrid(newCase: Case, caseContent: CaseContent) {
+        const lastContentCase = caseContent!.getCurrentCell()
+        lastContentCase.updateCurrentContent()
+
+        newCase.updateCurrentContent(caseContent)
+        caseContent?.updateCurrentCell(newCase)
+
+        this.virtualGrid.set(lastContentCase.index, null)
+        this.virtualGrid.set(newCase.index, caseContent!.getInitialName())
+    }
+
+    public updateGridWhenPush(animal: Animal, pushed: ICaseContent, nextPushedCase: Case) {
+
+        const lastAnimalCaseIndex = animal.getCurrentCell().index
+        const lastPushedCaseIndex = pushed.getCurrentCell().index
+
+        // 1. Mets à jour la cellule actuelle de l'animal
+        animal.updateCurrentCell(this.gridCases.get(lastPushedCaseIndex)!)
+        this.gridCases.get(lastAnimalCaseIndex)?.updateCurrentContent()
+
+        // 2. Mets à jour la cellule actuelle du contenu poussé
+        nextPushedCase.updateCurrentContent(pushed);
+        pushed.updateCurrentCell(nextPushedCase);
+
+        // 3. Mets à jour les grilles virtuelles
+        this.virtualGrid.set(lastAnimalCaseIndex, null);
+        this.virtualGrid.set(lastPushedCaseIndex, animal.getInitialName())
+        this.virtualGrid.set(nextPushedCase.index, pushed.getInitialName())
     }
 
     private getEntryPointsForArea(area: ReservedArea, moveNumber: number) {
@@ -92,12 +116,7 @@ export default class Board {
         if (animal.getPosition() === position && animal.currentCell === cell) {
             return
         }
-
-        if (!this.isAvailable(cell) && animal.currentCell !== cell) {
-            console.warn("La case que vous voulez vous déplacez, n'est pas disponible")
-            return
-        }
-
+        
         if (cell.isReserve()) {
             position = animal.reservedArea === 'bottom' ? 'top' : 'bottom'
         }
@@ -128,8 +147,7 @@ export default class Board {
     }
 
     private getAdjacentCases(cell: Case, moveNumber: number): Case[] {
-        const allowedCases = this.getMoveAllowedCases(moveNumber, cell)
-        return allowedCases.filter(cell => this.isAvailable(cell))
+        return this.getMoveAllowedCases(moveNumber, cell)
     }
 
     private getMoveAllowedCases(moveNumber: number, cell: Case) {
@@ -182,7 +200,22 @@ export default class Board {
         return this.gridCases
     }
 
+    public getVirtualStateGame() {
+        return this.virtualGrid
+    }
+
     public getAnimals(): Map<string, Animal> {
         return this.animales
+    }
+
+    public findNextCaseInDirection(caseIndex: number, direction: AnimalPosition) {
+        const index = {
+            top: caseIndex - BoardSetupper.CASE_COLUMN_NUMBER ,
+            bottom: caseIndex + BoardSetupper.CASE_COLUMN_NUMBER,
+            left: caseIndex - 1,
+            right: caseIndex + 1
+        }
+
+        return this.gridCases.get(index[direction])
     }
 }

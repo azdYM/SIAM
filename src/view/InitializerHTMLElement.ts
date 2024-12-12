@@ -140,6 +140,7 @@ export default class InitializerHTMLElement {
     private createRockElement(rock: Rock) {
         const rockElement = document.createElement('span')
         rockElement.setAttribute('class', 'caseContent')
+        rockElement.setAttribute('id', rock.id)
         const image = document.createElement('img')
         
         image.setAttribute('src', `/public/images/rock-${rock.cell.index}.png`)

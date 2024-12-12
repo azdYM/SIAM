@@ -3,6 +3,7 @@ import Board from "../model/Board";
 import Case from "../model/Case";
 import { ActionInHTMLElement, AnimalPosition } from "../types";
 import AngleCalculator from "../service/AngleCalculator";
+import ICaseContent from "../model/ICaseContent";
 
 export default class InteractorHTMLElement {
 
@@ -110,6 +111,18 @@ export default class InteractorHTMLElement {
         
         currentCellElement?.removeChild<HTMLElement>(animalElement)
         cellElement?.append(animalElement)   
+    }
+
+    public async moveAnimalWithPush(animal: Animal, pushed: ICaseContent) {
+        this.resetLastAction()
+        const animalElement = document.getElementById(animal.id)
+        const pushedCurrentCaseElement = document.getElementById(animal.getCurrentCell().id)
+        const pushedNextCaseElement = document.getElementById(pushed.getCurrentCell().id)
+        const pushedElement = document.getElementById(pushed.getId())
+
+        pushedNextCaseElement?.appendChild(pushedElement as Node)
+        pushedCurrentCaseElement?.appendChild(animalElement as Node)
+
     }
 
     private resetLastAction() {

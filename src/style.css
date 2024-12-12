@@ -160,7 +160,7 @@ button.anCliquable.animalSelected img {
 
 .restrictedCell {
   cursor: pointer;
-  transition: border .0s ease-in-out .3s;
+  transition: border .0s ease .2s;
 }
 
 .restrictedCell:hover {
@@ -168,6 +168,10 @@ button.anCliquable.animalSelected img {
 }
 
 .restrictedCell > button {
+  z-index: 0;
+}
+
+.restrictedCell > span {
   z-index: 0;
 }
 

@@ -2,7 +2,7 @@ import Animal from '../model/Animal.ts'
 import Board from '../model/Board.ts'
 import Case from '../model/Case.ts'
 import GameManager from './GameManager.ts'
-import { AnimalPosition, PlayerByArea } from '../types.ts'
+import { AnimalPosition, GridCasesType, PlayerByArea } from '../types.ts'
 
 export default class Game {
 
@@ -25,23 +25,31 @@ export default class Game {
     if (this.gameManager.canEnterAnimal(animal, cell)) {
       animal.enterOnBoard(cell, position)
       this.gameManager.next()
-      return this.board?.updateVirtualGrid(cell.index, animal)
+      return this.board?.updateGrid(cell, animal)
     }
 
     if (this.gameManager.canMoveAnimal(animal, cell)) {
-      animal.moveToEmptyCase(cell, position)
+      animal.move(cell, position)
       this.gameManager.next()
-      return this.board?.updateVirtualGrid(cell.index, animal)
+      return this.board?.updateGrid(cell, animal)
     }
 
-    if (this.gameManager.canMoveAnimalAndPushContent()) {
+    const direction = this.gameManager.canAnimalPushContentCase(animal, cell)
+    if (direction) {
       const caseContent = cell.getContent()
       if (!caseContent) {
         throw new Error('Ce case ne contient ni animal ni rochet')
       }
+
+      const toCase = this.board?.findNextCaseInDirection(cell.index, direction)
+      if (toCase === undefined) {
+        console.warn(`Impossible de déplacer ${animal.id}`)
+        return
+      }
+      
+      this.board?.updateGridWhenPush(animal, caseContent, toCase)
       animal.moveWithPush(caseContent)
-      this.gameManager.next()
-      return this.board?.updateVirtualGrid(cell.index, animal)
+      return this.gameManager.next()
     }
   }
 
@@ -57,6 +65,10 @@ export default class Game {
   public getAvailableCases(moveNumber: number): Case[] {
     if (!this.selectedAnimal) throw new Error('Aucun animal sélectionner')
     return this.board!.getAvailableCasesForSelectedAnimal(this.selectedAnimal, moveNumber)
+  }
+
+  public getVirtualState() {
+    return this.board?.getVirtualStateGame()
   }
 
   public setPlayers(playerBySide: PlayerByArea) {

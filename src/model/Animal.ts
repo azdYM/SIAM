@@ -30,6 +30,10 @@ export default class Animal implements ICaseContent {
         return this.currentCell
     }
 
+    public updateCurrentCell(cell: Case): void {
+        this.currentCell = cell
+    }
+
     public getInitialName(): ("RO" | "E" | "R") {
         if (this.name === 'Eléphan') return "E"
         return "R"
@@ -55,35 +59,39 @@ export default class Animal implements ICaseContent {
         return this.position
     }
 
-    public enterOnBoard(cell: Case, position: AnimalPosition) {
-        this.handleMove(cell, position)
-    }
-
-    public moveToEmptyCase(cell: Case, position: AnimalPosition) {
-        this.handleMove(cell, position)
-    }
-
-    public rotateAnimal(position: AnimalPosition) {
-
-    }
-
-    public removeFromBoard(cell: Case) {
-
-    }
-
-    public moveWithPush(pushed: ICaseContent) {
-
-    }
-
-    private async handleMove(cell: Case, position: AnimalPosition) {
+    public async enterOnBoard(cell: Case, position: AnimalPosition) {
         if (!this.HTMLInteractor) {
             throw new Error("Le HTMLInteractor n'est activé veuillez l'avtivez en appellant setHTMLInteractor")
         }
-
-        this.player.incrementMoveNumber()
+        
         await this.HTMLInteractor.moveAnimalToCase(this, cell, position)
+        this.handleMove(position, cell)
+    }
+
+    public async move(cell: Case, position: AnimalPosition) {
+        if (!this.HTMLInteractor) {
+            throw new Error("Le HTMLInteractor n'est activé veuillez l'avtivez en appellant setHTMLInteractor")
+        }
+        
+        await this.HTMLInteractor.moveAnimalToCase(this, cell, position)
+        this.handleMove(position, cell)
+    }
+
+    public async moveWithPush(pushed: ICaseContent) {
+        if (!this.HTMLInteractor) {
+            throw new Error("Le HTMLInteractor n'est activé veuillez l'avtivez en appellant setHTMLInteractor")
+        }
+        
+        await this.HTMLInteractor.moveAnimalWithPush(this, pushed)
+        this.handleMove(this.position!)
+    }
+
+    private handleMove(position: AnimalPosition, cell?: Case) {
+        this.player.incrementMoveNumber()
         this.position = position
-        this.currentCell = cell
+
+        if (cell)
+            this.currentCell = cell
     }
 }
 

@@ -11,6 +11,10 @@ export default class Rock implements ICaseContent {
         return this.cell
     }
 
+    updateCurrentCell(cell: Case): void {
+        this.cell = cell
+    }
+
     getInitialName(): ("RO" | "E" | "R") {
         return "RO"
     }

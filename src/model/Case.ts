@@ -30,8 +30,8 @@ export default class Case {
         this.HTMLInteractor?.showAnimalPositionTooltip(this, animal)
     }
 
-    public updateCurrentContent(content: CaseContent) {
-        this.currentContent = content
+    public updateCurrentContent(content?: CaseContent) {
+        this.currentContent = content ?? null
     }
 }
 
