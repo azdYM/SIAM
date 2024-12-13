@@ -169,7 +169,7 @@ button.anCliquable.animalSelected img {
 }
 
 .restrictedCell:hover {
-  border: yellow dashed 3px; border-radius: 4px !important;
+  border: yellow dashed 3px; border-radius: 4px;
 }
 
 .restrictedCell > button {
@@ -186,8 +186,13 @@ button.anCliquable.animalSelected img {
   border-radius: 3px;
 }
 
+.clSelection {
+  border: rgb(255, 0, 166) dashed 3px; 
+  border-radius: 4px;
+}
+
 .clCliquable {
-  border: rgb(0, 244, 4) dashed 3px !important; 
+  border: rgb(0, 244, 4) dashed 3px; 
   border-radius: 4px;
 }
 
@@ -196,7 +201,3 @@ button.anCliquable.animalSelected img {
   border-radius: 4px;
 }
 
-.clSelection {
-  border: rgb(255, 0, 166) dashed 3px; 
-  border-radius: 4px;
-}
